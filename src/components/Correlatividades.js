@@ -55,16 +55,6 @@ const rows = [
 
   const style = {
     py: 2,
-    width: "100%",
-    minWidth: 650,
-    borderRadius: 2,
-    border: "1px solid",
-    borderColor: "divider",
-    backgroundColor: "background.paper",
-  };
-
-  const border = {
-    py: 2,
     mb: 2 ,
     width: "100%",
     borderRadius: 2,
@@ -79,8 +69,8 @@ export default function DenseTable() {
   const materiasRegulares = rows.filter((row) => row.nota === 7).length;
 
   return (
-    <Paper sx={{ overflow: "hidden" }}>
-      <Container sx={border}>
+    <Container sx={{ overflow: "hidden" }}>
+      <Container sx={style}>
       <TableContainer sx={{ maxHeight: 440, mb: 2 }}>
         <Table size="small" aria-label="a dense table">
           <TableHead>
@@ -150,6 +140,6 @@ export default function DenseTable() {
           </Box>
         </Box>
       </Container>
-    </Paper>
+    </Container>
   );
 }

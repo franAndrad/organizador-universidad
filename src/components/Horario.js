@@ -304,7 +304,7 @@ const Horario = () => {
   }, []);
 
   return (
-    <Paper sx={{ overflow: "hidden" }}>
+    <Container sx={{ overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Reloj />
         <Container sx={style}>
@@ -352,7 +352,7 @@ const Horario = () => {
         </Table>
               </Container>
       </TableContainer>
-    </Paper>
+    </Container>
   );
 };
 
