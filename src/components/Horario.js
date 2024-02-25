@@ -286,20 +286,27 @@ const Horario = () => {
     },
   ];
 
+    const style = {
+      py: 2,
+      width: "100%",
+      borderRadius: 2,
+      border: "1px solid",
+      borderColor: "divider",
+      backgroundColor: "background.paper",
+    };
+
   //eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const diaActual = new Date().getDay();
     //const diaActual = 3;
-    if (diaActual >= 1 && diaActual <= 5) {
-      setContenidoDiario(horario[diaActual]);
-    }
+    setContenidoDiario(horario[diaActual]);
   }, []);
 
   return (
     <Paper sx={{ overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Reloj />
-        <Table size="small" aria-label="a dense table">
+        <Table sx={style} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell align="center">Hora</TableCell>
