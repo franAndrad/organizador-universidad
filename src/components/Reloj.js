@@ -27,6 +27,7 @@ const Reloj = () => {
 
     const style = {
       mb: 2,
+      pt: 2,
       width: "100%",
       maxWidth: 650,
       borderRadius: 2,

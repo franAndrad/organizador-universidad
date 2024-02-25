@@ -18,7 +18,7 @@ export default function App() {
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Container sx={{ my: 10 }}>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid item xs={12} lg={6}>
             <Tareas></Tareas>
           </Grid>

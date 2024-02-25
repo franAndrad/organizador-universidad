@@ -63,6 +63,16 @@ const rows = [
     backgroundColor: "background.paper",
   };
 
+  const border = {
+    py: 2,
+    mb: 2 ,
+    width: "100%",
+    borderRadius: 2,
+    border: "1px solid",
+    borderColor: "divider",
+    backgroundColor: "background.paper",
+  };
+
 export default function DenseTable() {
 
   const materiasAprobadas = rows.filter((row) => row.nota >= 7).length;
@@ -70,8 +80,9 @@ export default function DenseTable() {
 
   return (
     <Paper sx={{ overflow: "hidden" }}>
+      <Container sx={border}>
       <TableContainer sx={{ maxHeight: 440, mb: 2 }}>
-        <Table sx={style} size="small" aria-label="a dense table">
+        <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell align="left">N</TableCell>
@@ -85,19 +96,19 @@ export default function DenseTable() {
           <TableBody>
             {rows.map((row) => (
               <TableRow
-                hover
-                role="checkbox"
-                key={row.nombre}
-                sx={{
+              hover
+              role="checkbox"
+              key={row.nombre}
+              sx={{
                   "&:last-child td, &:last-child th": { border: 0 },
                   backgroundColor:
-                    row.nota >= 7
-                      ? "#80af"
-                      : row.nota === 6
-                      ? "#80a5"
-                      : "inherit",
+                  row.nota >= 7
+                  ? "#80af"
+                  : row.nota === 6
+                  ? "#80a5"
+                  : "inherit",
                 }}
-              >
+                >
                 <TableCell align="left">{row.numero}</TableCell>
                 <TableCell align="left">{row.nombre}</TableCell>
                 <TableCell align="left">{row.modalidad}</TableCell>
@@ -109,33 +120,34 @@ export default function DenseTable() {
           </TableBody>
         </Table>
       </TableContainer>
+    </Container>
 
       <Container sx={style}>
         <Box sx={{ fontSize: "14px" }}>
-              <Box sx={{ display: "flex" }}>
-                <Box
-                  sx={{
-                    mr: 2,
-                    width: 17,
-                    height: 17,
-                    borderRadius: 1,
-                    bgcolor: "#80a5",
-                  }}
-                />
-                <p>Regulares: {materiasRegulares}</p>
-              </Box>
-              <Box sx={{ display: "flex" }}>
-                <Box
-                  sx={{
-                    mr: 2,
-                    width: 17,
-                    height: 17,
-                    borderRadius: 1,
-                    bgcolor: "#80af",
-                  }}
-                />
-                <p className="mb-0">Aprobadas: {materiasAprobadas}</p>
-              </Box>
+          <Box sx={{ display: "flex" }}>
+            <Box
+              sx={{
+                mr: 2,
+                width: 17,
+                height: 17,
+                borderRadius: 1,
+                bgcolor: "#80a5",
+              }}
+            />
+            <p>Regulares: {materiasRegulares}</p>
+          </Box>
+          <Box sx={{ display: "flex" }}>
+            <Box
+              sx={{
+                mr: 2,
+                width: 17,
+                height: 17,
+                borderRadius: 1,
+                bgcolor: "#80af",
+              }}
+            />
+            <p className="mb-0">Aprobadas: {materiasAprobadas}</p>
+          </Box>
         </Box>
       </Container>
     </Paper>

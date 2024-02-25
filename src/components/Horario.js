@@ -6,6 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Container from "@mui/material/Container";
 import Reloj from "./Reloj";
 import { useEffect, useState } from "react";
 
@@ -306,6 +307,8 @@ const Horario = () => {
     <Paper sx={{ overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Reloj />
+        <Container sx={style}>
+
         <Table sx={style} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
@@ -321,17 +324,17 @@ const Horario = () => {
                   colSpan={3}
                   align="center"
                   sx={{ background: "#80aa", height:100 }}
-                >
+                  >
                   No hay eventos
                 </TableCell>
               </TableRow>
             ) : (
               contenidoDiario.materias.map((materia) => (
                 <TableRow
-                  hover
-                  role="checkbox"
-                  key={materia.nombre}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                hover
+                role="checkbox"
+                key={materia.nombre}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell align="left" sx={{ background: "#80aa" }}>
                     {materia.horario}
@@ -344,9 +347,10 @@ const Horario = () => {
                   </TableCell>
                 </TableRow>
               ))
-            )}
+              )}
           </TableBody>
         </Table>
+              </Container>
       </TableContainer>
     </Paper>
   );
