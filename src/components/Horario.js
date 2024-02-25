@@ -313,7 +313,7 @@ const Horario = () => {
                 <TableCell
                   colSpan={3}
                   align="center"
-                  sx={{ background: "#80aa" }}
+                  sx={{ background: "#80aa", height:100 }}
                 >
                   No hay eventos
                 </TableCell>
