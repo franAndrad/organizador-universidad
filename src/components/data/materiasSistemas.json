@@ -1,0 +1,298 @@
+[
+  {
+    "nombre": "Análisis Matemático 1",
+    "numero": 1,
+    "modalidad": "A",
+    "regular": "",
+    "aprobada": "",
+    "nota": 9
+  },
+  {
+    "nombre": "Álgebra y Geometría Analítica",
+    "numero": 2,
+    "modalidad": "A",
+    "regular": "",
+    "aprobada": "",
+    "nota": 8
+  },
+  {
+    "nombre": "Física 1",
+    "numero": 3,
+    "modalidad": "A",
+    "regular": "",
+    "aprobada": "",
+    "nota": 9
+  },
+  {
+    "nombre": "Inglés 1",
+    "numero": 4,
+    "modalidad": "A",
+    "regular": "",
+    "aprobada": "",
+    "nota": 8
+  },
+  {
+    "nombre": "Lógica y Estructuras Discretas",
+    "numero": 5,
+    "modalidad": "1C-CC",
+    "regular": "",
+    "aprobada": "",
+    "nota": 9
+  },
+  {
+    "nombre": "Algoritmos y Estructuras de Datos",
+    "numero": 6,
+    "modalidad": "A",
+    "regular": "",
+    "aprobada": "",
+    "nota": 10
+  },
+  {
+    "nombre": "Arquitectura de Computadoras",
+    "numero": 7,
+    "modalidad": "2C-CC",
+    "regular": "",
+    "aprobada": "",
+    "nota": 10
+  },
+  {
+    "nombre": "Sistemas y Procesos de Negocio",
+    "numero": 8,
+    "modalidad": "1C-CC",
+    "regular": "",
+    "aprobada": "",
+    "nota": 8
+  },
+  {
+    "nombre": "Ingeniería y Sociedad",
+    "numero": 9,
+    "modalidad": "2C-CC",
+    "regular": "",
+    "aprobada": "",
+    "nota": 9
+  },
+  {
+    "nombre": "Análisis Matemático 2",
+    "numero": 10,
+    "modalidad": "A",
+    "regular": "1-2",
+    "aprobada": "",
+    "nota": 8
+  },
+  {
+    "nombre": "Física 2",
+    "numero": 11,
+    "modalidad": "A",
+    "regular": "1-3",
+    "aprobada": "",
+    "nota": 8
+  },
+  {
+    "nombre": "Inglés 2",
+    "numero": 12,
+    "modalidad": "A",
+    "regular": "4",
+    "aprobada": "",
+    "nota": 0
+  },
+  {
+    "nombre": "Sintaxis y Semántica de los Lenguajes",
+    "numero": 13,
+    "modalidad": "1C-CC",
+    "regular": "5-6",
+    "aprobada": "",
+    "nota": 0
+  },
+  {
+    "nombre": "Paradigmas de Programación",
+    "numero": 14,
+    "modalidad": "2C-CC",
+    "regular": "5-6",
+    "aprobada": "",
+    "nota": 0
+  },
+  {
+    "nombre": "Sistemas Operativos",
+    "numero": 15,
+    "modalidad": "A",
+    "regular": "7",
+    "aprobada": "",
+    "nota": 0
+  },
+  {
+    "nombre": "Análisis de Sistemas de Información (Integradora)",
+    "numero": 16,
+    "modalidad": "A",
+    "regular": "6-8",
+    "aprobada": "",
+    "nota": 0
+  },
+  {
+    "nombre": "Probabilidad y Estadísticas",
+    "numero": 17,
+    "modalidad": "1C-CC",
+    "regular": "1-2",
+    "aprobada": "",
+    "nota": 10
+  },
+  {
+    "nombre": "Economía",
+    "numero": 18,
+    "modalidad": "2C-CC",
+    "regular": "",
+    "aprobada": "1-2",
+    "nota": 0
+  },
+  {
+    "nombre": "Bases de Datos",
+    "numero": 19,
+    "modalidad": "1C-CC",
+    "regular": "13-16",
+    "aprobada": "5-6",
+    "nota": 0
+  },
+  {
+    "nombre": "Desarrollo de Software",
+    "numero": 20,
+    "modalidad": "1C-CC",
+    "regular": "14-16",
+    "aprobada": "5-6",
+    "nota": 0
+  },
+  {
+    "nombre": "Comunicación de Datos",
+    "numero": 21,
+    "modalidad": "A",
+    "regular": "",
+    "aprobada": "3-7",
+    "nota": 0
+  },
+  {
+    "nombre": "Análisis Numérico",
+    "numero": 22,
+    "modalidad": "2C-CC",
+    "regular": "9",
+    "aprobada": "1-2",
+    "nota": 9
+  },
+  {
+    "nombre": "Diseño de Sistemas de Información (Integradora)",
+    "numero": 99,
+    "modalidad": "A",
+    "regular": "14-16",
+    "aprobada": "4-6-8",
+    "nota": 0
+  },
+  {
+    "nombre": "Seminario Integrador (Analista)",
+    "numero": 23,
+    "modalidad": "2C",
+    "regular": "16",
+    "aprobada": "6-8-13-14",
+    "nota": 0
+  },
+  {
+    "nombre": "Legislación",
+    "numero": 24,
+    "modalidad": "2C-CC",
+    "regular": "11",
+    "aprobada": "",
+    "nota": 0
+  },
+  {
+    "nombre": "Ingeniería y Calidad de Software",
+    "numero": 25,
+    "modalidad": "2C-CC",
+    "regular": "19-20-23",
+    "aprobada": "13-14",
+    "nota": 0
+  },
+  {
+    "nombre": "Redes de Datos",
+    "numero": 26,
+    "modalidad": "A",
+    "regular": "15-21",
+    "aprobada": "",
+    "nota": 0
+  },
+  {
+    "nombre": "Investigación Operativa",
+    "numero": 27,
+    "modalidad": "A",
+    "regular": "17-22",
+    "aprobada": "",
+    "nota": 0
+  },
+  {
+    "nombre": "Simulación",
+    "numero": 28,
+    "modalidad": "1C-CC",
+    "regular": "17",
+    "aprobada": "",
+    "nota": 0
+  },
+  {
+    "nombre": "Tecnologías para la Automatización",
+    "numero": 29,
+    "modalidad": "2C-CC",
+    "regular": "10-22",
+    "aprobada": "9",
+    "nota": 0
+  },
+  {
+    "nombre": "Administración de Sistemas de Información (Integradora)",
+    "numero": 30,
+    "modalidad": "A",
+    "regular": "18-23",
+    "aprobada": "16",
+    "nota": 0
+  },
+  {
+    "nombre": "Inteligencia Artificial",
+    "numero": 31,
+    "modalidad": "A",
+    "regular": "28",
+    "aprobada": "17-22",
+    "nota": 0
+  },
+  {
+    "nombre": "Ciencia de Datos",
+    "numero": 32,
+    "modalidad": "2C-CC",
+    "regular": "28",
+    "aprobada": "17-19",
+    "nota": 0
+  },
+  {
+    "nombre": "Sistemas de Gestión",
+    "numero": 33,
+    "modalidad": "A",
+    "regular": "18-27",
+    "aprobada": "23",
+    "nota": 0
+  },
+  {
+    "nombre": "Gestión Gerencial",
+    "numero": 34,
+    "modalidad": "1C-CC",
+    "regular": "24-30",
+    "aprobada": "18",
+    "nota": 0
+  },
+  {
+    "nombre": "Seguridad en los Sistemas de Información",
+    "numero": 35,
+    "modalidad": "1C-CC",
+    "regular": "26-30",
+    "aprobada": "20-21",
+    "nota": 0
+  },
+  {
+    "nombre": "Proyecto Final (Integradora)",
+    "numero": 36,
+    "modalidad": "A",
+    "regular": "25-26-30",
+    "aprobada": "12-20-23",
+    "nota": 0
+  }
+]

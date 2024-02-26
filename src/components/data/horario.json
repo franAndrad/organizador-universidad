@@ -1,0 +1,95 @@
+[
+  {
+    "dia": "DOMINGO",
+    "materias": []
+  },
+  {
+    "dia": "LUNES",
+    "materias": [
+      {
+        "nombre": "Sistemas Operativos",
+        "abreviacion": "SOP",
+        "curso": "2K11 - 232",
+        "horario": "08:00 - 09:30"
+      },
+      {
+        "nombre": "Comunicacion de Datos",
+        "abreviacion": "COM",
+        "curso": "3k1 - 415",
+        "horario": "10:25 - 14:00"
+      },
+      {
+        "nombre": "Economia",
+        "abreviacion": "ECO",
+        "curso": "3k7 - 524",
+        "horario": "14:55 - 17:20"
+      }
+    ]
+  },
+  {
+    "dia": "MARTES",
+    "materias": [
+      {
+        "nombre": "Sintaxis y Semántica de los Lenguajes",
+        "abreviacion": "SSL",
+        "curso": "2K11 - 609",
+        "horario": "10:25 - 14:00"
+      },
+      {
+        "nombre": "Legislación",
+        "abreviacion": "LEG",
+        "curso": "3R2 - 512",
+        "horario": "18:15 - 19:45"
+      }
+    ]
+  },
+  {
+    "dia": "MIERCOLES",
+    "materias": [
+      {
+        "nombre": "Análisis de Sistemas de Información",
+        "abreviacion": "ASI",
+        "curso": "2K11 - 232",
+        "horario": "10:25 - 12:50"
+      },
+      {
+        "nombre": "Inglés 2",
+        "abreviacion": "IN2",
+        "curso": "3k3 - 223",
+        "horario": "16:35 - 18:05"
+      }
+    ]
+  },
+  {
+    "dia": "JUEVES",
+    "materias": [
+      {
+        "nombre": "Sintaxis y Semántica de los Lenguajes",
+        "abreviacion": "SSL",
+        "curso": "2K11 - 609",
+        "horario": "08:00 - 11:10"
+      }
+    ]
+  },
+  {
+    "dia": "VIERNES",
+    "materias": [
+      {
+        "nombre": "Análisis de Sistemas de Información",
+        "abreviacion": "ASI",
+        "curso": "2K11 - 410",
+        "horario": "08:00 - 10:25"
+      },
+      {
+        "nombre": "Sistemas Operativos",
+        "abreviacion": "SOP",
+        "curso": "2K11 - 232",
+        "horario": "08:00 - 09:30"
+      }
+    ]
+  },
+  {
+    "dia": "SABADO",
+    "materias": []
+  }
+]

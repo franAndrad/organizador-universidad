@@ -1,20 +1,13 @@
-import * as React from "react";
+import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import parcialesData from "./data/parciales.json";
 
 const Parciales = () => {
-
-  const parciales = [
-    // {
-    //   fecha: "12/10/2024",
-    //   nombre: "Sistemas Operativos",
-    // },
-  ];
-
   const tablestyle = {
     width: "100%",
     mb: 2,
@@ -25,48 +18,50 @@ const Parciales = () => {
   };
 
   return (
-      <TableContainer sx={tablestyle}>
-        <Table size="small" aria-label="a dense table">
-          <TableHead>
+    <TableContainer sx={tablestyle}>
+      <Table size="small" aria-label="a dense table">
+        <TableHead>
+          <TableRow>
+            <TableCell align="center" colSpan={2}>
+              PARCIALES
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell align="center">Fecha</TableCell>
+            <TableCell align="center">Materia</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {parcialesData.length === 0 ? (
             <TableRow>
-              <TableCell align="center" colSpan={2}>PARCIALES</TableCell>
+              <TableCell
+                align="center"
+                colSpan={2}
+                sx={{ background: "#80aa", height: 100 }}
+              >
+                No hay parciales
+              </TableCell>
             </TableRow>
-            <TableRow>
-              <TableCell align="center">Fecha</TableCell>
-              <TableCell align="center">Materia</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {parciales.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  align="center"
-                  colSpan={2}
-                  sx={{ background: "#80aa", height: 100 }}
-                >
-                  No hay parciales
+          ) : (
+            parcialesData.map((materia) => (
+              <TableRow
+                hover
+                role="checkbox"
+                key={materia.nombre}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="center" sx={{ background: "#80aa" }}>
+                  {materia.fecha}
+                </TableCell>
+                <TableCell align="center" sx={{ background: "#80aa" }}>
+                  {materia.nombre}
                 </TableCell>
               </TableRow>
-            ) : (
-              parciales.map((materia) => (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  key={materia.nombre}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="center" sx={{ background: "#80aa" }}>
-                    {materia.fecha}
-                  </TableCell>
-                  <TableCell align="center" sx={{ background: "#80aa" }}>
-                    {materia.nombre}
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
