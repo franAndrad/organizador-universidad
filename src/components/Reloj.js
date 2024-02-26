@@ -1,7 +1,6 @@
-import { Container } from "@mui/material";
 import React, { useState, useEffect } from "react";
 
-const Reloj = () => {
+const Reloj = (props) => {
   const [fechaHora, setFechaHora] = useState(new Date());
 
   useEffect(() => {
@@ -25,23 +24,10 @@ const Reloj = () => {
     });
   };
 
-    const style = {
-      mb: 2,
-      pt: 2,
-      width: "100%",
-      maxWidth: 650,
-      borderRadius: 2,
-      border: "1px solid",
-      borderColor: "divider",
-      backgroundColor: "background.paper",
-    };
-
   return (
-    <Container sx={style}>
-      <h2>Hora y Fecha</h2>
-      <p>{formatearFecha(fechaHora)}</p>
-      <p>{formatearHora(fechaHora)}</p>
-    </Container>
+      <div>
+        {props.data} - {formatearFecha(fechaHora)} {formatearHora(fechaHora)}
+      </div>
   );
 };
 

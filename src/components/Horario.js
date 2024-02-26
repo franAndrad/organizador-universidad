@@ -6,23 +6,21 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
 import Reloj from "./Reloj";
+import Parciales from "./Parciales";
 import { useEffect, useState } from "react";
 
 
 const Horario = () => {
-  const [contenidoDiario, setContenidoDiario] = useState({
-    dia: "",
-    materias: [],
-  });
 
   const horario = [
     {
-      dia: "Domingo",
+      dia: "DOMINGO",
       materias: [],
     },
     {
-      dia: "Lunes",
+      dia: "LUNES",
       materias: [
         {
           nombre: "Sistemas Operativos",
@@ -45,7 +43,7 @@ const Horario = () => {
       ],
     },
     {
-      dia: "Martes",
+      dia: "MARTES",
       materias: [
         {
           nombre: "Sintaxis y Semántica de los Lenguajes",
@@ -62,7 +60,7 @@ const Horario = () => {
       ],
     },
     {
-      dia: "Miércoles",
+      dia: "MIERCOLES",
       materias: [
         {
           nombre: "Análisis de Sistemas de Información",
@@ -79,7 +77,7 @@ const Horario = () => {
       ],
     },
     {
-      dia: "Jueves",
+      dia: "JUEVES",
       materias: [
         {
           nombre: "Sintaxis y Semántica de los Lenguajes",
@@ -90,7 +88,7 @@ const Horario = () => {
       ],
     },
     {
-      dia: "Viernes",
+      dia: "VIERNES",
       materias: [
         {
           nombre: "Análisis de Sistemas de Información",
@@ -107,38 +105,69 @@ const Horario = () => {
       ],
     },
     {
-      dia: "Sabado",
+      dia: "SABADO",
       materias: [],
     },
   ];
 
-    const style = {
-      py: 2,
-      width: "100%",
-      borderRadius: 2,
-      border: "1px solid",
-      borderColor: "divider",
-      backgroundColor: "background.paper",
-    };
+  const [diaFijo, setDiaFijo] = useState("");
+  const [diaActual, setDiaActual] = useState(new Date().getDay());
+  const [dia, setDia] = useState(new Date().getDay());
+  const [contenidoDiario, setContenidoDiario] = useState({
+    dia: "",
+    materias: [],
+  });
 
-  //eslint-disable-next-line react-hooks/exhaustive-deps
+  const tablestyle = {
+    mb: 2,
+    maxHeight: 440,
+    borderRadius: 2,
+    border: "1px solid",
+    borderColor: "divider",
+    backgroundColor: "background.paper",
+  };
+
+  const incrementarDia = () => {
+    setDia((prevDia) => (prevDia + 1) % 7);
+  };
+
+  const decrementarDia = () => {
+    setDia((prevDia) => (prevDia - 1 + 7) % 7);
+  };
+
   useEffect(() => {
-    const diaActual = new Date().getDay();
-    //const diaActual = 2;
-    setContenidoDiario(horario[diaActual]);
-  }, []);
+    setContenidoDiario(horario[dia]);
+    setDiaFijo(horario[diaActual].dia);
+  }, [dia]);
 
   return (
     <Container sx={{ overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: 600 }}>
-        <Reloj />
-        <Container sx={style}>
-        <h2>Horario</h2>
-        <Table sx={style} size="small" aria-label="a dense table">
+      <TableContainer sx={tablestyle}>
+        <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
+              <TableCell align="center" colSpan={3}>
+                <Reloj data={diaFijo} />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell align="center">
+                <Button variant="text" onClick={decrementarDia}>
+                  {"<"}
+                </Button>
+              </TableCell>
+              <TableCell align="center">
+                {contenidoDiario.dia}
+              </TableCell>
+              <TableCell align="center">
+                <Button variant="text" onClick={incrementarDia}>
+                  {">"}
+                </Button>
+              </TableCell>
+            </TableRow>
+            <TableRow>
               <TableCell align="center">Hora</TableCell>
-              <TableCell align="center">{contenidoDiario.dia}</TableCell>
+              <TableCell align="center">Materia</TableCell>
               <TableCell align="center">Curso</TableCell>
             </TableRow>
           </TableHead>
@@ -148,18 +177,18 @@ const Horario = () => {
                 <TableCell
                   colSpan={3}
                   align="center"
-                  sx={{ background: "#80aa", height:100 }}
-                  >
+                  sx={{ background: "#80aa", height: 100 }}
+                >
                   No hay eventos
                 </TableCell>
               </TableRow>
             ) : (
               contenidoDiario.materias.map((materia) => (
                 <TableRow
-                hover
-                role="checkbox"
-                key={materia.nombre}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  hover
+                  role="checkbox"
+                  key={materia.nombre}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell align="center" sx={{ background: "#80aa" }}>
                     {materia.horario}
@@ -172,11 +201,12 @@ const Horario = () => {
                   </TableCell>
                 </TableRow>
               ))
-              )}
+            )}
           </TableBody>
         </Table>
-              </Container>
       </TableContainer>
+
+      <Parciales />
     </Container>
   );
 };
