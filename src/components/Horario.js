@@ -5,7 +5,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Reloj from "./Reloj";
 import { useEffect, useState } from "react";
@@ -125,7 +124,7 @@ const Horario = () => {
   //eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const diaActual = new Date().getDay();
-    //const diaActual = 3;
+    //const diaActual = 2;
     setContenidoDiario(horario[diaActual]);
   }, []);
 
@@ -162,13 +161,13 @@ const Horario = () => {
                 key={materia.nombre}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell align="left" sx={{ background: "#80aa" }}>
+                  <TableCell align="center" sx={{ background: "#80aa" }}>
                     {materia.horario}
                   </TableCell>
-                  <TableCell align="left" sx={{ background: "#80aa" }}>
-                    {materia.nombre}
+                  <TableCell align="center" sx={{ background: "#80aa" }}>
+                    {materia.abreviacion}
                   </TableCell>
-                  <TableCell align="left" sx={{ background: "#80aa" }}>
+                  <TableCell align="center" sx={{ background: "#80aa" }}>
                     {materia.curso}
                   </TableCell>
                 </TableRow>
