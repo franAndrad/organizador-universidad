@@ -62,6 +62,14 @@ const rows = [
     backgroundColor: "background.paper",
   };
 
+  const tablestyle = {
+    mb: 2,
+    maxHeight: 440,
+    borderRadius: 2,
+    border: "1px solid",
+    borderColor: "divider",
+    backgroundColor: "background.paper",
+  };
 export default function DenseTable() {
 
   const materiasAprobadas = rows.filter((row) => row.nota >= 7).length;
@@ -70,7 +78,8 @@ export default function DenseTable() {
   return (
     <Container sx={{ overflow: "hidden" }}>
       <Container sx={style}>
-      <TableContainer sx={{ maxHeight: 440, mb: 2 }}>
+        <h2>Materias</h2>
+      <TableContainer sx={tablestyle}>
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>

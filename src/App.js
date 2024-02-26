@@ -19,10 +19,10 @@ export default function App() {
       <CssBaseline />
       <Container sx={{ my: 10 }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} lg={6}>
+          <Grid item xs={12} lg={5}>
             <Tareas></Tareas>
           </Grid>
-          <Grid item xs={12} lg={6}>
+          <Grid item xs={12} lg={7}>
             <Correlatividades></Correlatividades>
           </Grid>
         </Grid>

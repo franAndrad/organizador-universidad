@@ -133,7 +133,7 @@ const Horario = () => {
       <TableContainer sx={{ maxHeight: 600 }}>
         <Reloj />
         <Container sx={style}>
-
+        <h2>Horario</h2>
         <Table sx={style} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
