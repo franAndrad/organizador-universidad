@@ -73,13 +73,14 @@ const puedeRealizar = (materia, rows) => {
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell align="center" colSpan={6}>
+              <TableCell align="center" colSpan={7}>
                 INGENIERIA EN SISTEMAS
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell align="left">N</TableCell>
               <TableCell align="left">Asignatura</TableCell>
+              <TableCell align="left">Abreviacion</TableCell>
               <TableCell align="left">Modalidad</TableCell>
               <TableCell align="left">Nota</TableCell>
             </TableRow>
@@ -104,6 +105,7 @@ const puedeRealizar = (materia, rows) => {
               >
                 <TableCell align="left">{row.numero}</TableCell>
                 <TableCell align="left">{row.nombre}</TableCell>
+                <TableCell align="left">{row.abreviacion}</TableCell>
                 <TableCell align="left">{row.modalidad}</TableCell>
                 <TableCell align="left">{row.nota}</TableCell>
               </TableRow>
@@ -138,9 +140,7 @@ const puedeRealizar = (materia, rows) => {
                 bgcolor: "#80af",
               }}
             />
-            <p>
-              Aprobadas: {rows.filter((row) => row.nota >= 7).length}
-            </p>
+            <p>Aprobadas: {rows.filter((row) => row.nota >= 7).length}</p>
           </Box>
           <Box sx={{ display: "flex" }}>
             <Box
