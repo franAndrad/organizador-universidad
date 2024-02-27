@@ -36,8 +36,36 @@ const DenseTable = () => {
     setRows(datos);
   }, []);
 
-  const materiasAprobadas = rows.filter((row) => row.nota >= 7).length;
-  const materiasRegulares = rows.filter((row) => row.nota === 7).length;
+  // Función para verificar si una materia se puede realizar
+const puedeRealizar = (materia, rows) => {
+  // Verificar si la materia ya está aprobada o tiene una nota mayor o igual a 6
+  if (materia.nota >= 6) return false;
+
+  // Obtener los números de las materias aprobadas y regulares
+  const materiasAprobadas = rows
+    .filter((row) => row.nota >= 7)
+    .map((row) => row.numero);
+  
+  const materiasRegulares = rows
+    .filter((row) => row.nota === 6)
+    .map((row) => row.numero);
+
+  // Verificar si el estudiante ha aprobado todas las materias requeridas para regular y aprobada
+  const todasRegularesAprobadas = materia.regular.every(
+  (numero) => materiasRegulares.includes(numero) || materiasAprobadas.includes(numero)
+  );
+
+  const todasAprobadas = materia.aprobada.every((numero) =>
+    materiasAprobadas.includes(numero)
+  );
+
+  if (todasRegularesAprobadas && todasAprobadas) {
+    return true;
+  }
+
+  return false;
+};
+
 
   return (
     <Container sx={{ overflow: "hidden" }}>
@@ -53,8 +81,6 @@ const DenseTable = () => {
               <TableCell align="left">N</TableCell>
               <TableCell align="left">Asignatura</TableCell>
               <TableCell align="left">Modalidad</TableCell>
-              <TableCell align="left">Regular</TableCell>
-              <TableCell align="left">Aprobada</TableCell>
               <TableCell align="left">Nota</TableCell>
             </TableRow>
           </TableHead>
@@ -71,14 +97,14 @@ const DenseTable = () => {
                       ? "#80af"
                       : row.nota === 6
                       ? "#80a5"
+                      : puedeRealizar(row, rows)
+                      ? "#806f"
                       : "inherit",
                 }}
               >
                 <TableCell align="left">{row.numero}</TableCell>
                 <TableCell align="left">{row.nombre}</TableCell>
                 <TableCell align="left">{row.modalidad}</TableCell>
-                <TableCell align="left">{row.regular}</TableCell>
-                <TableCell align="left">{row.aprobada}</TableCell>
                 <TableCell align="left">{row.nota}</TableCell>
               </TableRow>
             ))}
@@ -88,6 +114,7 @@ const DenseTable = () => {
 
       <Container sx={style}>
         <Box sx={{ fontSize: "14px" }}>
+          {/* Contar materias regulares */}
           <Box sx={{ display: "flex" }}>
             <Box
               sx={{
@@ -98,8 +125,9 @@ const DenseTable = () => {
                 bgcolor: "#80a5",
               }}
             />
-            <p>Regulares: {materiasRegulares}</p>
+            <p>Regulares: {rows.filter((row) => row.nota === 6).length}</p>
           </Box>
+          {/* Contar materias aprobadas */}
           <Box sx={{ display: "flex" }}>
             <Box
               sx={{
@@ -110,7 +138,21 @@ const DenseTable = () => {
                 bgcolor: "#80af",
               }}
             />
-            <p className="mb-0">Aprobadas: {materiasAprobadas}</p>
+            <p>
+              Aprobadas: {rows.filter((row) => row.nota >= 7).length}
+            </p>
+          </Box>
+          <Box sx={{ display: "flex" }}>
+            <Box
+              sx={{
+                mr: 2,
+                width: 17,
+                height: 17,
+                borderRadius: 1,
+                bgcolor: "#806f",
+              }}
+            />
+            <p className="mb-0">Materias habilitadas para cursar</p>
           </Box>
         </Box>
       </Container>
