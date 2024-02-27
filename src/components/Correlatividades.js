@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import datos from "./data/materiasSistemas.json";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const style = {
   py: 2,
@@ -30,42 +31,45 @@ const tablestyle = {
 
 const DenseTable = () => {
   const [rows, setRows] = useState([]);
+  const { isAuthenticated } = useAuth0();
 
   useEffect(() => {
-    // Cargar los datos al montar el componente
-    setRows(datos);
-  }, []);
+    // Cargar los datos solo si el usuario está autenticado
+    if (isAuthenticated) {
+      setRows(datos);
+    }
+  }, [isAuthenticated]);
 
   // Función para verificar si una materia se puede realizar
-const puedeRealizar = (materia, rows) => {
-  // Verificar si la materia ya está aprobada o tiene una nota mayor o igual a 6
-  if (materia.nota >= 6) return false;
+  const puedeRealizar = (materia, rows) => {
+    // Verificar si la materia ya está aprobada o tiene una nota mayor o igual a 6
+    if (materia.nota >= 6) return false;
 
-  // Obtener los números de las materias aprobadas y regulares
-  const materiasAprobadas = rows
-    .filter((row) => row.nota >= 7)
-    .map((row) => row.numero);
-  
-  const materiasRegulares = rows
-    .filter((row) => row.nota === 6)
-    .map((row) => row.numero);
+    // Obtener los números de las materias aprobadas y regulares
+    const materiasAprobadas = rows
+      .filter((row) => row.nota >= 7)
+      .map((row) => row.numero);
 
-  // Verificar si el estudiante ha aprobado todas las materias requeridas para regular y aprobada
-  const todasRegularesAprobadas = materia.regular.every(
-  (numero) => materiasRegulares.includes(numero) || materiasAprobadas.includes(numero)
-  );
+    const materiasRegulares = rows
+      .filter((row) => row.nota === 6)
+      .map((row) => row.numero);
 
-  const todasAprobadas = materia.aprobada.every((numero) =>
-    materiasAprobadas.includes(numero)
-  );
+    // Verificar si el estudiante ha aprobado todas las materias requeridas para regular y aprobada
+    const todasRegularesAprobadas = materia.regular.every(
+      (numero) =>
+        materiasRegulares.includes(numero) || materiasAprobadas.includes(numero)
+    );
 
-  if (todasRegularesAprobadas && todasAprobadas) {
-    return true;
-  }
+    const todasAprobadas = materia.aprobada.every((numero) =>
+      materiasAprobadas.includes(numero)
+    );
 
-  return false;
-};
+    if (todasRegularesAprobadas && todasAprobadas) {
+      return true;
+    }
 
+    return false;
+  };
 
   return (
     <Container sx={{ overflow: "hidden" }}>
@@ -86,30 +90,42 @@ const puedeRealizar = (materia, rows) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                hover
-                role="checkbox"
-                key={row.nombre}
-                sx={{
-                  "&:last-child td, &:last-child th": { border: 0 },
-                  backgroundColor:
-                    row.nota >= 7
-                      ? "#80af"
-                      : row.nota === 6
-                      ? "#80a5"
-                      : puedeRealizar(row, rows)
-                      ? "#806f"
-                      : "inherit",
-                }}
-              >
-                <TableCell align="left">{row.numero}</TableCell>
-                <TableCell align="left">{row.nombre}</TableCell>
-                <TableCell align="left">{row.abreviacion}</TableCell>
-                <TableCell align="left">{row.modalidad}</TableCell>
-                <TableCell align="left">{row.nota}</TableCell>
+            {rows.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  align="center"
+                  sx={{ background: "#80aa", height: 100 }}
+                >
+                  No hay materias
+                </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              rows.map((row) => (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  key={row.nombre}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    backgroundColor:
+                      row.nota >= 7
+                        ? "#80af"
+                        : row.nota === 6
+                        ? "#80a5"
+                        : puedeRealizar(row, rows)
+                        ? "#806f"
+                        : "inherit",
+                  }}
+                >
+                  <TableCell align="left">{row.numero}</TableCell>
+                  <TableCell align="left">{row.nombre}</TableCell>
+                  <TableCell align="left">{row.abreviacion}</TableCell>
+                  <TableCell align="left">{row.modalidad}</TableCell>
+                  <TableCell align="left">{row.nota}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -152,7 +168,7 @@ const puedeRealizar = (materia, rows) => {
                 bgcolor: "#806f",
               }}
             />
-            <p className="mb-0">Materias habilitadas para cursar</p>
+            <p className="mb-0">Habilitadas para cursar</p>
           </Box>
         </Box>
       </Container>

@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useAuth0 } from "@auth0/auth0-react";
 import parcialesData from "./data/parciales.json";
 
 const Parciales = () => {
+  const [parciales, setParciales] = useState([]);
+  const { isAuthenticated } = useAuth0();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setParciales(parcialesData);
+    }
+  }, [isAuthenticated]);
+
   const tablestyle = {
     width: "100%",
     mb: 2,
@@ -32,7 +42,7 @@ const Parciales = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {parcialesData.length === 0 ? (
+          {parciales.length === 0 ? (
             <TableRow>
               <TableCell
                 align="center"
@@ -43,18 +53,18 @@ const Parciales = () => {
               </TableCell>
             </TableRow>
           ) : (
-            parcialesData.map((materia) => (
+            parciales.map((parcial, index) => (
               <TableRow
                 hover
                 role="checkbox"
-                key={materia.nombre}
+                key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="center" sx={{ background: "#80aa" }}>
-                  {materia.fecha}
+                  {parcial.fecha}
                 </TableCell>
                 <TableCell align="center" sx={{ background: "#80aa" }}>
-                  {materia.nombre}
+                  {parcial.materia}
                 </TableCell>
               </TableRow>
             ))
@@ -66,3 +76,5 @@ const Parciales = () => {
 };
 
 export default Parciales;
+
+

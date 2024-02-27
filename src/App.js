@@ -1,11 +1,10 @@
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import Tareas from "./components/Horario";
-import Correlatividades from "./components/Correlatividades";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Grid from "@mui/material/Grid";
-import Container from "@mui/material/Container";
+import Menu from "./components/Menu";
+import Home from "./components/Home";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const darkTheme = createTheme({
   palette: {
@@ -14,19 +13,17 @@ const darkTheme = createTheme({
 });
 
 export default function App() {
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <Container sx={{ my: 10 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} lg={5}>
-            <Tareas></Tareas>
-          </Grid>
-          <Grid item xs={12} lg={7}>
-            <Correlatividades></Correlatividades>
-          </Grid>
-        </Grid>
-      </Container>
+
+      <BrowserRouter>
+        <Menu />
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }

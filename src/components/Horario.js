@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import Reloj from "./Reloj";
 import Parciales from "./Parciales";
 import horarioData from "./data/horario.json";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Horario = () => {
   const [diaFijo, setDiaFijo] = useState("");
@@ -19,6 +20,8 @@ const Horario = () => {
     dia: "",
     materias: [],
   });
+
+  const { isAuthenticated } = useAuth0();
 
   const tablestyle = {
     mb: 2,
@@ -37,10 +40,19 @@ const Horario = () => {
     setDia((prevDia) => (prevDia - 1 + 7) % 7);
   };
 
-  useEffect(() => {
-    setContenidoDiario(horarioData[dia]);
-    setDiaFijo(horarioData[diaActual].dia);
-  }, [dia]);
+ useEffect(() => {
+  setDiaFijo(horarioData[diaActual].dia);
+   if (isAuthenticated) {
+     // Aquí puedes cargar el horario una vez que el usuario esté autenticado
+     setContenidoDiario(horarioData[dia]);
+   } else {
+     // Muestra un indicador de carga u otro contenido mientras no esté autenticado
+     setContenidoDiario({
+       dia: "Cargando...",
+       materias: [],
+     });
+   }
+ }, [isAuthenticated, dia]);
 
   return (
     <Container sx={{ overflow: "hidden" }}>
