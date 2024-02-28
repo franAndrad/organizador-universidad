@@ -138,7 +138,6 @@ const DenseTable = () => {
       )
         .then((response) => response.json())
         .then((data) => {
-          console.log(user.email)
           // Verificar si el contenido ya existe
           if (data.length === 0) {
             // Si el contenido no existe, enviar la solicitud para agregarlo
@@ -157,7 +156,15 @@ const DenseTable = () => {
               .then((data) => {
                 // Actualizar los datos si es necesario
                 if (data.success) {
-                  // Realizar una nueva carga de datos o alguna otra acción necesaria
+                  // Realizar una nueva carga de datos
+                  fetch(
+                    `${apiUrl}/materias?email=${user.email}&userId=${user.sub}`
+                  )
+                    .then((response) => response.json())
+                    .then((data) => setRows(data))
+                    .catch((error) =>
+                      console.error("Error fetching data:", error)
+                    );
                 }
               })
               .catch((error) => console.error("Error adding data:", error));
