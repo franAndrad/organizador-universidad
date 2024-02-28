@@ -20,6 +20,7 @@ const Horario = () => {
     dia: "",
     materias: [],
   });
+   const apiUrl = process.env.REACT_APP_API_URL; 
 
   const { isAuthenticated } = useAuth0();
 
@@ -42,7 +43,7 @@ const Horario = () => {
 
   const consultarDatos = async () => {
     try {
-      const response = await fetch("http://localhost:4000/horarios");
+      const response = await fetch(`${apiUrl}/horarios`);
       const data = await response.json();
       setContenidoDiario(data[dia]);
       setDiaFijo(data[diaActual].dia);

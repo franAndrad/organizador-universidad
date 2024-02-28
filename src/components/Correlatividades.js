@@ -31,11 +31,12 @@ const tablestyle = {
 const DenseTable = () => {
   const [rows, setRows] = useState([]);
   const { isAuthenticated } = useAuth0();
+  const apiUrl = process.env.REACT_APP_API_URL; 
 
   useEffect(() => {
     // Cargar los datos solo si el usuario está autenticado
     if (isAuthenticated) {
-      fetch("http://localhost:4000/materias")
+      fetch(`${apiUrl}/materias`)
         .then((response) => response.json())
         .then((data) => setRows(data))
         .catch((error) => console.error("Error fetching data:", error));
