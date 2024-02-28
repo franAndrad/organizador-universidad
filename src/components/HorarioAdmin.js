@@ -20,15 +20,17 @@ const Horario = () => {
   const [diaFijo, setDiaFijo] = useState("");
   const [diaActual, setDiaActual] = useState(new Date().getDay());
   const [dia, setDia] = useState(new Date().getDay());
-  const [contenidoDiario, setContenidoDiario] = useState([
-    { dia: "DOMINGO", materias: [] },
-    { dia: "LUNES", materias: [] },
-    { dia: "MARTES", materias: [] },
-    { dia: "MIERCOLES", materias: [] },
-    { dia: "JUEVES", materias: [] },
-    { dia: "VIERNES", materias: [] },
-    { dia: "SABADO", materias: [] },
-  ]);
+    const getInitialData = () => [
+      { dia: "DOMINGO", materias: [] },
+      { dia: "LUNES", materias: [] },
+      { dia: "MARTES", materias: [] },
+      { dia: "MIERCOLES", materias: [] },
+      { dia: "JUEVES", materias: [] },
+      { dia: "VIERNES", materias: [] },
+      { dia: "SABADO", materias: [] },
+    ];
+
+  const [contenidoDiario, setContenidoDiario] = useState(getInitialData());
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const [editIndex, setEditIndex] = useState(null);
@@ -53,6 +55,7 @@ const Horario = () => {
       { dia: "SABADO", materias: [] },
     ];
 
+  useEffect(() => {
     if (isAuthenticated) {
       consultarDatos();
     } else {
