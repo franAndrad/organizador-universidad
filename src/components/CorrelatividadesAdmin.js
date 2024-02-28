@@ -171,7 +171,11 @@ const DenseTable = () => {
             console.log("El contenido ya existe");
           }
         })
-        .catch((error) => console.error("Error checking data:", error));
+        .catch((error) => console.error("Error checking data:", error))
+        .finally(() => {
+          // Después de enviar la solicitud, restablecer el estado
+          setSendRequest(false);
+        });
     }
   }, [sendRequest]);
 
