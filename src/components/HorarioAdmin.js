@@ -13,7 +13,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import Reloj from "./Reloj";
-import Parciales from "./Parciales";
+import Parciales from "./ParcialesAdmin";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Horario = () => {

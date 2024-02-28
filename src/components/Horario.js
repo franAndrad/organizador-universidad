@@ -8,7 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Reloj from "./Reloj";
-import Parciales from "./ParcialesAdmin";
+import Parciales from "./Parciales";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Horario = () => {

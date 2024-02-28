@@ -183,7 +183,7 @@ const DenseTable = () => {
                   onClick={handleSendRequest}
                   sx={{ ml: 2 }}
                 >
-                  Enviar solicitud
+                  Cargar materias
                 </Button>
               </TableCell>
             </TableRow>
@@ -243,6 +243,7 @@ const DenseTable = () => {
                         }}
                         min={0}
                         max={10}
+                        style={{ height: 36, verticalAlign: "middle" }}
                       />
                     ) : (
                       row.nota
