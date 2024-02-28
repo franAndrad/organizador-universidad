@@ -134,7 +134,7 @@ const DenseTable = () => {
     if (sendRequest) {
       // Realizar una solicitud GET previa para verificar si el contenido ya existe
       fetch(
-        `${apiUrl}/materias?email=${user.email}&userId=${user.sub}`
+        `${apiUrl}/materias?email=${user.email}&userId=${user.sub}&value=${selectedOption}`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -179,7 +179,7 @@ const DenseTable = () => {
               <TableCell align="left" colSpan={7}>
                 <select value={selectedOption} onChange={handleSelectChange}>
                   <option value="ing.sistemas">Ing. Sistemas</option>
-                  <option value="ing.electronica">Ing. Electronica</option>
+                  {/* <option value="ing.electronica">Ing. Electronica</option> */}
                   {/* Agrega más opciones aquí si es necesario */}
                 </select>
                 <Button
