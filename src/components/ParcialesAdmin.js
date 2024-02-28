@@ -18,6 +18,7 @@ const Parciales = () => {
   const [editData, setEditData] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [nuevoParcial, setNuevoParcial] = useState({ fecha: "", materia: "" });
+  const apiUrl = process.env.REACT_APP_API_URL; 
 
   useEffect(() => {
     obtenerParciales();
@@ -25,7 +26,7 @@ const Parciales = () => {
 
   const obtenerParciales = async () => {
     try {
-      const response = await fetch("http://localhost:4000/parciales");
+      const response = await fetch(`${apiUrl}/parciales`);
       if (response.ok) {
         const data = await response.json();
         setParciales(data);
@@ -52,7 +53,7 @@ const Parciales = () => {
 
   const handleEliminarParcial = async (id) => {
     try {
-      const response = await fetch(`http://localhost:4000/parcial/${id}`, {
+      const response = await fetch(`${apiUrl}/parcial/${id}`, {
         method: "DELETE",
       });
       if (response.ok) {
@@ -81,7 +82,7 @@ const Parciales = () => {
 
   const handleGuardarCambios = async (id, index) => {
     try {
-      const response = await fetch(`http://localhost:4000/parcial/${id}`, {
+      const response = await fetch(`${apiUrl}/parcial/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +115,7 @@ const Parciales = () => {
   const handleAgregarParcial = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:4000/parciales", {
+      const response = await fetch("${apiUrl}/parciales", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

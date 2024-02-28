@@ -25,6 +25,7 @@ const Horario = () => {
     dia: "",
     materias: [],
   });
+  const apiUrl = process.env.REACT_APP_API_URL; 
 
   const [editIndex, setEditIndex] = useState(null);
   const [editData, setEditData] = useState({
@@ -55,7 +56,7 @@ const Horario = () => {
 
   const consultarDatos = async () => {
     try {
-      const response = await fetch("http://localhost:4000/horarios");
+      const response = await fetch(`${apiUrl}/horarios`);
       const data = await response.json();
       setContenidoDiario(data[dia]);
       setDiaFijo(data[diaActual].dia);
@@ -88,7 +89,7 @@ const Horario = () => {
       updatedDay.materias.push(editData);
 
       // Realizar la solicitud PUT al servidor para actualizar el día completo
-      await fetch(`http://localhost:4000/horarios/${updatedDay._id}`, {
+      await fetch(`${apiUrl}/horarios/${updatedDay._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -130,7 +131,7 @@ const Horario = () => {
       updatedDay.materias.splice(materiaIndex, 1);
 
       // Realizar la solicitud PUT al servidor para actualizar el día completo
-      await fetch(`http://localhost:4000/horarios/${updatedDay._id}`, {
+      await fetch(`${apiUrl}/horarios/${updatedDay._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -180,7 +181,7 @@ const Horario = () => {
       };
 
       // Realizar la solicitud PUT al servidor para actualizar el día completo
-      await fetch(`http://localhost:4000/horarios/${updatedDay._id}`, {
+      await fetch(`${apiUrl}/horarios/${updatedDay._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

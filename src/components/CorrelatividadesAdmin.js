@@ -7,6 +7,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const style = {
@@ -28,14 +31,26 @@ const tablestyle = {
   backgroundColor: "background.paper",
 };
 
+const buttonStyle = {
+  width: 20,
+  height: 20,
+  minWidth: 20,
+  minHeight: 20,
+  fontSize: 10,
+};
+
 const DenseTable = () => {
   const [rows, setRows] = useState([]);
   const { isAuthenticated } = useAuth0();
+  const [editingRow, setEditingRow] = useState(null);
+  const [editedNote, setEditedNote] = useState("");
+  const apiUrl = process.env.REACT_APP_API_URL; // Aquí se utiliza la variable de entorno
+  console.log(apiUrl)
 
   useEffect(() => {
     // Cargar los datos solo si el usuario está autenticado
     if (isAuthenticated) {
-      fetch("http://localhost:4000/materias")
+      fetch(`${apiUrl}/materias`)
         .then((response) => response.json())
         .then((data) => setRows(data))
         .catch((error) => console.error("Error fetching data:", error));
@@ -71,6 +86,34 @@ const DenseTable = () => {
     }
 
     return false;
+  };
+
+  // Función para activar la edición de la nota
+  const handleEditNote = (row) => {
+    setEditingRow(row);
+    setEditedNote(row.nota);
+  };
+
+  // Función para guardar los cambios de la nota editada
+  const handleSaveNote = () => {
+    // Realizar la petición PUT al servidor para actualizar la nota en la base de datos
+    fetch(`${apiUrl}/${editingRow._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ nota: editedNote }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Actualizar el estado rows con la nueva nota editada
+        const updatedRows = rows.map((row) =>
+          row === editingRow ? { ...row, nota: editedNote } : row
+        );
+        setRows(updatedRows);
+        setEditingRow(null);
+      })
+      .catch((error) => console.error("Error updating note:", error));
   };
 
   return (
@@ -124,7 +167,45 @@ const DenseTable = () => {
                   <TableCell align="left">{row.nombre}</TableCell>
                   <TableCell align="left">{row.abreviacion}</TableCell>
                   <TableCell align="left">{row.modalidad}</TableCell>
-                  <TableCell align="left">{row.nota}</TableCell>
+                  <TableCell align="left">
+                    {editingRow === row ? (
+                      <input
+                        type="number"
+                        value={editedNote}
+                        onChange={(e) => {
+                          // Limitar el valor ingresado al rango de 0 a 10
+                          const newValue = Math.min(
+                            Math.max(e.target.value, 0),
+                            10
+                          );
+                          setEditedNote(newValue);
+                        }}
+                        min={0}
+                        max={10}
+                      />
+                    ) : (
+                      row.nota
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editingRow === row ? (
+                      <Button
+                        variant="outlined"
+                        sx={buttonStyle}
+                        onClick={handleSaveNote}
+                      >
+                        <SaveIcon />
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="outlined"
+                        sx={buttonStyle}
+                        onClick={() => handleEditNote(row)}
+                      >
+                        <EditIcon />
+                      </Button>
+                    )}
+                  </TableCell>
                 </TableRow>
               ))
             )}
