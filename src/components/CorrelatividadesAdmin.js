@@ -97,7 +97,7 @@ const DenseTable = () => {
   // Función para guardar los cambios de la nota editada
   const handleSaveNote = () => {
     // Realizar la petición PUT al servidor para actualizar la nota en la base de datos
-    fetch(`${apiUrl}/${editingRow._id}`, {
+    fetch(`${apiUrl}/materia/${editingRow._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

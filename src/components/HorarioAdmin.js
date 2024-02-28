@@ -89,7 +89,7 @@ const Horario = () => {
       updatedDay.materias.push(editData);
 
       // Realizar la solicitud PUT al servidor para actualizar el día completo
-      await fetch(`${apiUrl}/horarios/${updatedDay._id}`, {
+      await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -131,7 +131,7 @@ const Horario = () => {
       updatedDay.materias.splice(materiaIndex, 1);
 
       // Realizar la solicitud PUT al servidor para actualizar el día completo
-      await fetch(`${apiUrl}/horarios/${updatedDay._id}`, {
+      await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
