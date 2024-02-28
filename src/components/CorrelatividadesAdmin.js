@@ -49,13 +49,18 @@ const DenseTable = () => {
   const apiUrl = process.env.REACT_APP_API_URL; // Aquí se utiliza la variable de entorno
   console.log(apiUrl);
 
+  // Función para cargar los datos
+  const fetchData = () => {
+    fetch(`${apiUrl}/materias?email=${user.email}&userId=${user.sub}`)
+      .then((response) => response.json())
+      .then((data) => setRows(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  };
+
   useEffect(() => {
     // Cargar los datos solo si el usuario está autenticado
     if (isAuthenticated) {
-      fetch(`${apiUrl}/materias?email=${user.email}&userId=${user.sub}`)
-        .then((response) => response.json())
-        .then((data) => setRows(data))
-        .catch((error) => console.error("Error fetching data:", error));
+      fetchData();
     }
   }, [isAuthenticated]);
 
@@ -156,8 +161,8 @@ const DenseTable = () => {
               .then((data) => {
                 // Actualizar los datos si es necesario
                 if (data.success) {
-                  // Recargar la página para ver los datos actualizados
-                  window.location.reload();
+                  // Volver a cargar los datos para reflejar los cambios
+                  fetchData();
                 }
               })
               .catch((error) => console.error("Error adding data:", error));
