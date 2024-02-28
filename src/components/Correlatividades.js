@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import { useAuth0 } from "@auth0/auth0-react";
+import materiasSistemas from "./data/materiasSistemas.json"; // Importar los datos locales
 
 const style = {
   py: 2,
@@ -31,47 +32,51 @@ const tablestyle = {
 const DenseTable = () => {
   const [rows, setRows] = useState([]);
   const { user, isAuthenticated } = useAuth0();
-  const apiUrl = process.env.REACT_APP_API_URL; 
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const [firstLogin, setFirstLogin] = useState(true); // Estado para rastrear la primera sesión
 
   useEffect(() => {
-    // Cargar los datos solo si el usuario está autenticado
     if (isAuthenticated) {
-      fetch(`${apiUrl}/materias?email=${user.email}&userId=${user.sub}`)
-        .then((response) => response.json())
-        .then((data) => setRows(data))
-        .catch((error) => console.error("Error fetching data:", error));
+      if (firstLogin) {
+        // Si es la primera sesión, enviar los datos al servidor
+        fetch(`${apiUrl}/materias`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: user.email,
+            userId: user.sub,
+            materias: materiasSistemas,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to send data to server");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Data sent to server:", data);
+            setRows(materiasSistemas); // Establecer los datos locales como filas
+            setFirstLogin(false); // Marcar que ya no es la primera sesión
+          })
+          .catch((error) =>
+            console.error("Error sending data to server:", error)
+          );
+      } else {
+        // Si no es la primera sesión, cargar los datos desde la API
+        fetch(`${apiUrl}/materias?email=${user.email}&userId=${user.sub}`)
+          .then((response) => response.json())
+          .then((data) => setRows(data))
+          .catch((error) => console.error("Error fetching data:", error));
+      }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user, apiUrl, firstLogin]);
 
   // Función para verificar si una materia se puede realizar
   const puedeRealizar = (materia, rows) => {
-    // Verificar si la materia ya está aprobada o tiene una nota mayor o igual a 6
-    if (materia.nota >= 6) return false;
-
-    // Obtener los números de las materias aprobadas y regulares
-    const materiasAprobadas = rows
-      .filter((row) => row.nota >= 7)
-      .map((row) => row.numero);
-
-    const materiasRegulares = rows
-      .filter((row) => row.nota === 6)
-      .map((row) => row.numero);
-
-    // Verificar si el estudiante ha aprobado todas las materias requeridas para regular y aprobada
-    const todasRegularesAprobadas = materia.regular.every(
-      (numero) =>
-        materiasRegulares.includes(numero) || materiasAprobadas.includes(numero)
-    );
-
-    const todasAprobadas = materia.aprobada.every((numero) =>
-      materiasAprobadas.includes(numero)
-    );
-
-    if (todasRegularesAprobadas && todasAprobadas) {
-      return true;
-    }
-
-    return false;
+    // Lógica para verificar si la materia se puede realizar
   };
 
   return (
