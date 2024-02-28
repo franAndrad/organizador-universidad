@@ -45,17 +45,6 @@ const Horario = () => {
   const { user, isAuthenticated } = useAuth0();
 
   useEffect(() => {
-    const getInitialData = () => [
-      { dia: "DOMINGO", materias: [] },
-      { dia: "LUNES", materias: [] },
-      { dia: "MARTES", materias: [] },
-      { dia: "MIERCOLES", materias: [] },
-      { dia: "JUEVES", materias: [] },
-      { dia: "VIERNES", materias: [] },
-      { dia: "SABADO", materias: [] },
-    ];
-
-  useEffect(() => {
     if (isAuthenticated) {
       consultarDatos();
     } else {
