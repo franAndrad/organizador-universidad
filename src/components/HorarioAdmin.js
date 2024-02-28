@@ -43,18 +43,20 @@ const Horario = () => {
   const { user, isAuthenticated } = useAuth0();
 
   useEffect(() => {
+    const getInitialData = () => [
+      { dia: "DOMINGO", materias: [] },
+      { dia: "LUNES", materias: [] },
+      { dia: "MARTES", materias: [] },
+      { dia: "MIERCOLES", materias: [] },
+      { dia: "JUEVES", materias: [] },
+      { dia: "VIERNES", materias: [] },
+      { dia: "SABADO", materias: [] },
+    ];
+
     if (isAuthenticated) {
       consultarDatos();
     } else {
-      setContenidoDiario([
-        { dia: "DOMINGO", materias: [] },
-        { dia: "LUNES", materias: [] },
-        { dia: "MARTES", materias: [] },
-        { dia: "MIERCOLES", materias: [] },
-        { dia: "JUEVES", materias: [] },
-        { dia: "VIERNES", materias: [] },
-        { dia: "SABADO", materias: [] },
-      ]);
+      setContenidoDiario(getInitialData());
     }
   }, [isAuthenticated, dia]);
 
@@ -67,33 +69,19 @@ const Horario = () => {
       const response = await fetch(
         `${apiUrl}/horarios?email=${user.email}&userId=${user.sub}`
       );
+      if (!response.ok) {
+        throw new Error("Error al obtener los datos");
+      }
       const data = await response.json();
-
-      const updatedData = [
-        { dia: "DOMINGO", materias: [] },
-        { dia: "LUNES", materias: [] },
-        { dia: "MARTES", materias: [] },
-        { dia: "MIERCOLES", materias: [] },
-        { dia: "JUEVES", materias: [] },
-        { dia: "VIERNES", materias: [] },
-        { dia: "SABADO", materias: [] },
-      ];
-
-      // Merge data from the response into updatedData based on dia
-      data.forEach((item) => {
-        const index = updatedData.findIndex((d) => d.dia === item.dia);
-        if (index !== -1) {
-          updatedData[index] = { ...item };
-        }
+      const updatedData = getInitialData().map((defaultDay) => {
+        const foundDay = data.find((item) => item.dia === defaultDay.dia);
+        return foundDay ? foundDay : defaultDay;
       });
-
       setContenidoDiario(updatedData);
+      setDiaFijo(data[diaActual].dia);
     } catch (error) {
       console.error("Error al consultar los datos:", error);
     }
-
-    setDiaFijo(data[diaActual].dia);
-    console.log(data[diaActual].dia);
   };
 
   const handleAgregar = () => {
