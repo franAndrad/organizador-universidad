@@ -134,7 +134,7 @@ const DenseTable = () => {
     if (sendRequest) {
       // Realizar una solicitud GET previa para verificar si el contenido ya existe
       fetch(
-        `${apiUrl}/materias?email=${user.email}&userId=${user.sub}&value=${selectedOption}`
+        `${apiUrl}/materias?email=${user.email}&userId=${user.sub}`
       )
         .then((response) => response.json())
         .then((data) => {
