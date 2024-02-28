@@ -93,7 +93,7 @@ const Horario = () => {
     }
 
     setDiaFijo(data[diaActual].dia);
-  
+    console.log(data[diaActual].dia);
   };
 
   const handleAgregar = () => {
