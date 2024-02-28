@@ -41,13 +41,14 @@ const buttonStyle = {
 
 const DenseTable = () => {
   const [rows, setRows] = useState([]);
-  const {user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const [editingRow, setEditingRow] = useState(null);
   const [editedNote, setEditedNote] = useState("");
+  const [selectedOption, setSelectedOption] = useState("ing.sistemas"); // Valor seleccionado en el select
+  const [sendRequest, setSendRequest] = useState(false); // Estado para controlar si se debe enviar la solicitud
   const apiUrl = process.env.REACT_APP_API_URL; // Aquí se utiliza la variable de entorno
-  console.log(apiUrl)
+  console.log(apiUrl);
 
-  
   useEffect(() => {
     // Cargar los datos solo si el usuario está autenticado
     if (isAuthenticated) {
@@ -117,14 +118,77 @@ const DenseTable = () => {
       .catch((error) => console.error("Error updating note:", error));
   };
 
+  // Función para manejar el cambio en el select
+  const handleSelectChange = (event) => {
+    setSelectedOption(event.target.value);
+    setSendRequest(false); // Resetear el estado para enviar la solicitud
+  };
+
+  // Función para manejar el envío de la solicitud
+  const handleSendRequest = () => {
+    setSendRequest(true); // Establecer el estado para enviar la solicitud
+  };
+
+  // useEffect para enviar la solicitud cuando sendRequest cambie
+  useEffect(() => {
+    if (sendRequest) {
+      // Realizar una solicitud GET previa para verificar si el contenido ya existe
+      fetch(
+        `${apiUrl}/materias?email=${user.email}&userId=${user.sub}&value=${selectedOption}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(user.email)
+          // Verificar si el contenido ya existe
+          if (data.length === 0) {
+            // Si el contenido no existe, enviar la solicitud para agregarlo
+            fetch(`${apiUrl}/materias`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: user.email,
+                userId: user.sub,
+                value: selectedOption,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                // Actualizar los datos si es necesario
+                if (data.success) {
+                  // Realizar una nueva carga de datos o alguna otra acción necesaria
+                }
+              })
+              .catch((error) => console.error("Error adding data:", error));
+          } else {
+            // Si el contenido ya existe, mostrar un mensaje o realizar alguna otra acción
+            console.log("El contenido ya existe");
+          }
+        })
+        .catch((error) => console.error("Error checking data:", error));
+    }
+  }, [sendRequest]);
+
   return (
     <Container sx={{ overflow: "hidden" }}>
       <TableContainer sx={tablestyle}>
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell align="center" colSpan={7}>
-                INGENIERIA EN SISTEMAS
+              <TableCell align="left" colSpan={7}>
+                <select value={selectedOption} onChange={handleSelectChange}>
+                  <option value="ing.sistemas">Ing. Sistemas</option>
+                  <option value="ing.electronica">Ing. Electronica</option>
+                  {/* Agrega más opciones aquí si es necesario */}
+                </select>
+                <Button
+                  variant="contained"
+                  onClick={handleSendRequest}
+                  sx={{ ml: 2 }}
+                >
+                  Enviar solicitud
+                </Button>
               </TableCell>
             </TableRow>
             <TableRow>
