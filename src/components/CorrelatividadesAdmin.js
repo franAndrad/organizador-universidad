@@ -62,7 +62,7 @@ const DenseTable = () => {
     if (isAuthenticated) {
       fetchData();
     }
-  }, [isAuthenticated, rows]);
+  }, [isAuthenticated]);
 
   // Función para verificar si una materia se puede realizar
   const puedeRealizar = (materia, rows) => {
@@ -137,41 +137,28 @@ const DenseTable = () => {
   // useEffect para enviar la solicitud cuando sendRequest cambie
   useEffect(() => {
     if (sendRequest) {
-      // Realizar una solicitud GET previa para verificar si el contenido ya existe
-      fetch(
-        `${apiUrl}/materias?email=${user.email}&userId=${user.sub}&value=${selectedOption}`
-      )
+      // Si el contenido no existe, enviar la solicitud para agregarlo
+      fetch(`${apiUrl}/materias`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: user.email,
+          userId: user.sub,
+          value: selectedOption,
+        }),
+      })
         .then((response) => response.json())
         .then((data) => {
-          // Verificar si el contenido ya existe
-          if (data.length === 0) {
-            // Si el contenido no existe, enviar la solicitud para agregarlo
-            fetch(`${apiUrl}/materias`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                email: user.email,
-                userId: user.sub,
-                value: selectedOption,
-              }),
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                // Actualizar los datos si es necesario
-                if (data.success) {
-                  // Volver a cargar los datos para reflejar los cambios
-                  fetchData();
-                }
-              })
-              .catch((error) => console.error("Error adding data:", error));
-          } else {
-            // Si el contenido ya existe, mostrar un mensaje o realizar alguna otra acción
-            console.log("El contenido ya existe");
+          // Actualizar los datos si es necesario
+          console.log(data.success)
+          if (data.success) {
+            // Volver a cargar los datos para reflejar los cambios
+            fetchData();
           }
         })
-        .catch((error) => console.error("Error checking data:", error))
+        .catch((error) => console.error("Error adding data:", error))
         .finally(() => {
           // Después de enviar la solicitud, restablecer el estado
           setSendRequest(false);
