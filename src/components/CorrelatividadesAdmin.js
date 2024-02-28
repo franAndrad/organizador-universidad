@@ -158,6 +158,13 @@ const DenseTable = () => {
               }),
             })
               .then((response) => response.json())
+              .then((data) => {
+                // Actualizar los datos si es necesario
+                if (data.success) {
+                  // Volver a cargar los datos para reflejar los cambios
+                  fetchData();
+                }
+              })
               .catch((error) => console.error("Error adding data:", error));
           } else {
             // Si el contenido ya existe, mostrar un mensaje o realizar alguna otra acción
@@ -169,7 +176,6 @@ const DenseTable = () => {
           // Después de enviar la solicitud, restablecer el estado
           setSendRequest(false);
         });
-        fetchData();
     }
   }, [sendRequest]);
 
