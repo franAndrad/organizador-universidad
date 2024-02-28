@@ -73,7 +73,7 @@ const Horario = () => {
     } catch (error) {
       console.error("Error al consultar los datos:", error);
     }
-    setDiaFijo(data[diaActual].dia);
+    setDiaFijo(contenidoDiario[diaActual].dia);
   };
 
   const handleAgregar = () => {
