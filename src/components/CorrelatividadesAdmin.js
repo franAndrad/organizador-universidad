@@ -167,9 +167,9 @@ const DenseTable = () => {
         .catch((error) => console.error("Error checking data:", error))
         .finally(() => {
           // Después de enviar la solicitud, restablecer el estado
-          fetchData();
           setSendRequest(false);
         });
+        fetchData();
     }
   }, [sendRequest]);
 
