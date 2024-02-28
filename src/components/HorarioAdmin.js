@@ -25,7 +25,7 @@ const Horario = () => {
     dia: "",
     materias: [],
   });
-  const apiUrl = process.env.REACT_APP_API_URL; 
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [editIndex, setEditIndex] = useState(null);
   const [editData, setEditData] = useState({
@@ -36,7 +36,7 @@ const Horario = () => {
 
   const [adding, setAdding] = useState(false);
 
-  const { isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -56,7 +56,9 @@ const Horario = () => {
 
   const consultarDatos = async () => {
     try {
-      const response = await fetch(`${apiUrl}/horarios`);
+      const response = await fetch(
+        `${apiUrl}/horarios?email=${user.email}&userId=${user.sub}`
+      );
       const data = await response.json();
       setContenidoDiario(data[dia]);
       setDiaFijo(data[diaActual].dia);
@@ -66,12 +68,10 @@ const Horario = () => {
   };
 
   const handleAgregar = () => {
-    // Establecer el modo de agregar en verdadero
     setAdding(true);
   };
 
   const handleCancelAdd = () => {
-    // Cancelar la adición y restablecer los valores
     setAdding(false);
     setEditData({
       horario: "",
@@ -82,13 +82,11 @@ const Horario = () => {
 
   const handleAdd = async () => {
     try {
-      // Crear una copia del contenido diario actual
+      const dataToAdd = { ...editData, email: user.email, userId: user.sub };
+
       const updatedDay = { ...contenidoDiario };
+      updatedDay.materias.push(dataToAdd);
 
-      // Agregar la nueva materia al arreglo de materias
-      updatedDay.materias.push(editData);
-
-      // Realizar la solicitud PUT al servidor para actualizar el día completo
       await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
         method: "PUT",
         headers: {
@@ -97,17 +95,14 @@ const Horario = () => {
         body: JSON.stringify(updatedDay),
       });
 
-      // Restablecer los valores de edición
       setEditData({
         horario: "",
         abreviacion: "",
         curso: "",
       });
 
-      // Establecer el modo de agregar en falso
       setAdding(false);
 
-      // Actualizar el estado con el día modificado
       setContenidoDiario(updatedDay);
     } catch (error) {
       console.error("Error al agregar la materia:", error);
@@ -115,7 +110,6 @@ const Horario = () => {
   };
 
   const handleEditar = (materiaIndex) => {
-    // Establecer el índice de edición y los datos de edición
     setEditIndex(materiaIndex);
     setEditData({
       ...contenidoDiario.materias[materiaIndex],
@@ -124,13 +118,9 @@ const Horario = () => {
 
   const handleEliminar = async (materiaIndex) => {
     try {
-      // Crear una copia del contenido diario actual
       const updatedDay = { ...contenidoDiario };
-
-      // Eliminar la materia del arreglo de materias
       updatedDay.materias.splice(materiaIndex, 1);
 
-      // Realizar la solicitud PUT al servidor para actualizar el día completo
       await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
         method: "PUT",
         headers: {
@@ -139,9 +129,7 @@ const Horario = () => {
         body: JSON.stringify(updatedDay),
       });
 
-      // Actualizar el estado con el día modificado
       setContenidoDiario(updatedDay);
-      // Reiniciar el estado de edición después de eliminar
       setEditIndex(null);
       setEditData({
         horario: "",
@@ -154,13 +142,11 @@ const Horario = () => {
   };
 
   const handleInputChange = (e) => {
-    // Manejar cambios en los campos de edición
     const { name, value } = e.target;
     setEditData({ ...editData, [name]: value });
   };
 
   const handleCancelEdit = () => {
-    // Cancelar la edición y restablecer los valores
     setEditIndex(null);
     setEditData({
       horario: "",
@@ -171,16 +157,14 @@ const Horario = () => {
 
   const handleSubmitEdit = async () => {
     try {
-      // Crear una copia del contenido diario actual
-      const updatedDay = { ...contenidoDiario };
+      const dataToEdit = { ...editData, email: user.email, userId: user.sub };
 
-      // Modificar la materia correspondiente en el arreglo de materias
+      const updatedDay = { ...contenidoDiario };
       updatedDay.materias[editIndex] = {
         ...updatedDay.materias[editIndex],
-        ...editData,
+        ...dataToEdit,
       };
 
-      // Realizar la solicitud PUT al servidor para actualizar el día completo
       await fetch(`${apiUrl}/horarios/${updatedDay._id}`, {
         method: "PUT",
         headers: {
@@ -189,7 +173,6 @@ const Horario = () => {
         body: JSON.stringify(updatedDay),
       });
 
-      // Restablecer los valores de edición
       setEditIndex(null);
       setEditData({
         horario: "",
@@ -197,11 +180,18 @@ const Horario = () => {
         curso: "",
       });
 
-      // Actualizar el estado con el día modificado
       setContenidoDiario(updatedDay);
     } catch (error) {
       console.error("Error al editar la materia:", error);
     }
+  };
+
+  const incrementarDia = () => {
+    setDia((prevDia) => (prevDia + 1) % 7);
+  };
+
+  const decrementarDia = () => {
+    setDia((prevDia) => (prevDia - 1 + 7) % 7);
   };
 
   const tablestyle = {
@@ -219,14 +209,6 @@ const Horario = () => {
     minWidth: 20,
     minHeight: 20,
     fontSize: 10,
-  };
-
-  const incrementarDia = () => {
-    setDia((prevDia) => (prevDia + 1) % 7);
-  };
-
-  const decrementarDia = () => {
-    setDia((prevDia) => (prevDia - 1 + 7) % 7);
   };
 
   return (

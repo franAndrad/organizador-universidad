@@ -41,22 +41,24 @@ const buttonStyle = {
 
 const DenseTable = () => {
   const [rows, setRows] = useState([]);
-  const { isAuthenticated } = useAuth0();
+  const {user, isAuthenticated } = useAuth0();
   const [editingRow, setEditingRow] = useState(null);
   const [editedNote, setEditedNote] = useState("");
   const apiUrl = process.env.REACT_APP_API_URL; // Aquí se utiliza la variable de entorno
   console.log(apiUrl)
 
+  
   useEffect(() => {
     // Cargar los datos solo si el usuario está autenticado
     if (isAuthenticated) {
-      fetch(`${apiUrl}/materias`)
+      fetch(`${apiUrl}/materias?email=${user.email}&userId=${user.sub}`)
         .then((response) => response.json())
         .then((data) => setRows(data))
         .catch((error) => console.error("Error fetching data:", error));
     }
   }, [isAuthenticated]);
 
+  console.log(rows)
   // Función para verificar si una materia se puede realizar
   const puedeRealizar = (materia, rows) => {
     // Verificar si la materia ya está aprobada o tiene una nota mayor o igual a 6

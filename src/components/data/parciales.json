@@ -1,14 +1,20 @@
 [
   {
     "fecha": "2024-03-15",
-    "materia": "Matemáticas"
+    "materia": "Matemáticas",
+    "email": "fran.eze.andrad@gmail.com",
+    "userId": "google-oauth2|101382828087011668615"
   },
   {
     "fecha": "2024-03-20",
-    "materia": "Ciencias"
+    "materia": "Ciencias",
+    "email": "fran.eze.andrad@gmail.com",
+    "userId": "google-oauth2|101382828087011668615"
   },
   {
     "fecha": "2024-03-25",
-    "materia": "Historia"
+    "materia": "Historia",
+    "email": "fran.eze.andrad@gmail.com",
+    "userId": "google-oauth2|101382828087011668615"
   }
 ]

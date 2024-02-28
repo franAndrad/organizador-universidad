@@ -1,9 +1,13 @@
 [
   {
+    "email": "fran.eze.andrad@gmail.com",
+    "userId" : "google-oauth2|101382828087011668615",
     "dia": "DOMINGO",
     "materias": []
   },
   {
+    "email": "fran.eze.andrad@gmail.com",
+    "userId" : "google-oauth2|101382828087011668615",
     "dia": "LUNES",
     "materias": [
       {
@@ -27,6 +31,8 @@
     ]
   },
   {
+    "email": "fran.eze.andrad@gmail.com",
+    "userId" : "google-oauth2|101382828087011668615",
     "dia": "MARTES",
     "materias": [
       {
@@ -44,6 +50,8 @@
     ]
   },
   {
+    "email": "fran.eze.andrad@gmail.com",
+    "userId" : "google-oauth2|101382828087011668615",
     "dia": "MIERCOLES",
     "materias": [
       {
@@ -61,6 +69,8 @@
     ]
   },
   {
+    "email": "fran.eze.andrad@gmail.com",
+    "userId" : "google-oauth2|101382828087011668615",
     "dia": "JUEVES",
     "materias": [
       {
@@ -72,6 +82,8 @@
     ]
   },
   {
+    "email": "fran.eze.andrad@gmail.com",
+    "userId" : "google-oauth2|101382828087011668615",
     "dia": "VIERNES",
     "materias": [
       {
@@ -89,8 +101,9 @@
     ]
   },
   {
+    "email": "fran.eze.andrad@gmail.com",
+    "userId" : "google-oauth2|101382828087011668615",
     "dia": "SABADO",
     "materias": []
   }
 ]
-  

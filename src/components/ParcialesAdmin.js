@@ -11,6 +11,9 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useAuth0 } from "@auth0/auth0-react";
+
+
 
 const Parciales = () => {
   const [parciales, setParciales] = useState([]);
@@ -19,21 +22,21 @@ const Parciales = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [nuevoParcial, setNuevoParcial] = useState({ fecha: "", materia: "" });
   const apiUrl = process.env.REACT_APP_API_URL; 
+    const { user, isAuthenticated } = useAuth0();
+
 
   useEffect(() => {
-    obtenerParciales();
+    if (isAuthenticated){
+      obtenerParciales();
+    }
   }, []);
 
   const obtenerParciales = async () => {
     try {
-      const response = await fetch(`${apiUrl}/parciales`);
-      if (response.ok) {
-        const data = await response.json();
-        setParciales(data);
-        setEditData(data.map((parcial) => ({ ...parcial })));
-      } else {
-        console.error("Error al obtener los parciales:", response.statusText);
-      }
+      const response = await fetch(`${apiUrl}/parciales?email=${user.email}&userId=${user.sub}`);
+      const data = await response.json();
+      setParciales(data);
+      setEditData(data.map((parcial) => ({ ...parcial })));
     } catch (error) {
       console.error("Error al obtener los parciales:", error.message);
     }
