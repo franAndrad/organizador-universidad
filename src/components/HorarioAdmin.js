@@ -70,10 +70,10 @@ const Horario = () => {
         return foundDay ? foundDay : defaultDay;
       });
       setContenidoDiario(updatedData);
-      setDiaFijo(data[diaActual].dia);
     } catch (error) {
       console.error("Error al consultar los datos:", error);
     }
+    setDiaFijo(data[diaActual].dia);
   };
 
   const handleAgregar = () => {
