@@ -8,7 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Reloj from "./Reloj";
-import Parciales from "./Parciales";
+import Parciales from "./ParcialesAdmin";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Horario = () => {
@@ -29,23 +29,6 @@ const Horario = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const { user, isAuthenticated } = useAuth0();
-
-  const tablestyle = {
-    mb: 2,
-    maxHeight: 440,
-    borderRadius: 2,
-    border: "1px solid",
-    borderColor: "divider",
-    backgroundColor: "background.paper",
-  };
-
-  const incrementarDia = () => {
-    setDia((prevDia) => (prevDia + 1) % 7);
-  };
-
-  const decrementarDia = () => {
-    setDia((prevDia) => (prevDia - 1 + 7) % 7);
-  };
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -79,13 +62,30 @@ const Horario = () => {
     setDiaFijo(contenidoDiario[diaActual].dia);
   };
 
+  const incrementarDia = () => {
+    setDia((prevDia) => (prevDia + 1) % 7);
+  };
+
+  const decrementarDia = () => {
+    setDia((prevDia) => (prevDia - 1 + 7) % 7);
+  };
+
+  const tablestyle = {
+    mb: 2,
+    maxHeight: 440,
+    borderRadius: 2,
+    border: "1px solid",
+    borderColor: "divider",
+    backgroundColor: "background.paper",
+  };
+
   return (
     <Container sx={{ overflow: "hidden" }}>
       <TableContainer sx={tablestyle}>
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell align="center" colSpan={3}>
+              <TableCell align="center" colSpan={4}>
                 <Reloj data={diaFijo} />
               </TableCell>
             </TableRow>
@@ -95,7 +95,9 @@ const Horario = () => {
                   {"<"}
                 </Button>
               </TableCell>
-              <TableCell align="center">{contenidoDiario.dia}</TableCell>
+              <TableCell align="center">
+                {contenidoDiario[dia].dia}
+              </TableCell>
               <TableCell align="center">
                 <Button variant="text" onClick={incrementarDia}>
                   {">"}
@@ -109,8 +111,8 @@ const Horario = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {contenidoDiario.materias && contenidoDiario.materias.length > 0 ? (
-              contenidoDiario.materias.map((materia, index) => (
+            {contenidoDiario[dia].materias.length > 0 ? (
+              contenidoDiario[dia].materias.map((materia, index) => (
                 <TableRow
                   hover
                   role="checkbox"
@@ -131,17 +133,18 @@ const Horario = () => {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={3}
                   align="center"
+                  colSpan={3}
                   sx={{ background: "#80aa", height: 100 }}
                 >
-                  No hay eventos
+                  No hay materias
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </TableContainer>
+
       <Parciales />
     </Container>
   );
