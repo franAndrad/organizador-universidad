@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Menu from "./components/Menu";
 import Home from "./components/Home";
+import HomeAdmin from "./components/HomeAdmin";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const darkTheme = createTheme({
@@ -22,6 +23,7 @@ export default function App() {
         <Menu />
         <Routes>
           <Route exact path="/" element={<Home />} />
+          <Route exact path="/admin" element={<HomeAdmin />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
