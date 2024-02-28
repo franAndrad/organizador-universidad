@@ -20,11 +20,15 @@ const Horario = () => {
   const [diaFijo, setDiaFijo] = useState("");
   const [diaActual, setDiaActual] = useState(new Date().getDay());
   const [dia, setDia] = useState(new Date().getDay());
-  const [contenidoDiario, setContenidoDiario] = useState({
-    _id: "",
-    dia: "",
-    materias: [],
-  });
+  const [contenidoDiario, setContenidoDiario] = useState([
+    { dia: "DOMINGO", materias: [] },
+    { dia: "LUNES", materias: [] },
+    { dia: "MARTES", materias: [] },
+    { dia: "MIERCOLES", materias: [] },
+    { dia: "JUEVES", materias: [] },
+    { dia: "VIERNES", materias: [] },
+    { dia: "SABADO", materias: [] },
+  ]);
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const [editIndex, setEditIndex] = useState(null);
@@ -42,11 +46,15 @@ const Horario = () => {
     if (isAuthenticated) {
       consultarDatos();
     } else {
-      setContenidoDiario({
-        _id: "",
-        dia: "Cargando...",
-        materias: [],
-      });
+      setContenidoDiario([
+        { dia: "DOMINGO", materias: [] },
+        { dia: "LUNES", materias: [] },
+        { dia: "MARTES", materias: [] },
+        { dia: "MIERCOLES", materias: [] },
+        { dia: "JUEVES", materias: [] },
+        { dia: "VIERNES", materias: [] },
+        { dia: "SABADO", materias: [] },
+      ]);
     }
   }, [isAuthenticated, dia]);
 
@@ -60,7 +68,26 @@ const Horario = () => {
         `${apiUrl}/horarios?email=${user.email}&userId=${user.sub}`
       );
       const data = await response.json();
-      setContenidoDiario(data[dia]);
+
+      const updatedData = [
+        { dia: "DOMINGO", materias: [] },
+        { dia: "LUNES", materias: [] },
+        { dia: "MARTES", materias: [] },
+        { dia: "MIERCOLES", materias: [] },
+        { dia: "JUEVES", materias: [] },
+        { dia: "VIERNES", materias: [] },
+        { dia: "SABADO", materias: [] },
+      ];
+
+      // Merge data from the response into updatedData based on dia
+      data.forEach((item) => {
+        const index = updatedData.findIndex((d) => d.dia === item.dia);
+        if (index !== -1) {
+          updatedData[index] = { ...item };
+        }
+      });
+
+      setContenidoDiario(updatedData);
       setDiaFijo(data[diaActual].dia);
     } catch (error) {
       console.error("Error al consultar los datos:", error);
@@ -84,7 +111,7 @@ const Horario = () => {
     try {
       const dataToAdd = { ...editData, email: user.email, userId: user.sub };
 
-      const updatedDay = { ...contenidoDiario };
+      const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias.push(dataToAdd);
 
       await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
@@ -103,7 +130,9 @@ const Horario = () => {
 
       setAdding(false);
 
-      setContenidoDiario(updatedDay);
+      const updatedContenidoDiario = [...contenidoDiario];
+      updatedContenidoDiario[dia] = updatedDay;
+      setContenidoDiario(updatedContenidoDiario);
     } catch (error) {
       console.error("Error al agregar la materia:", error);
     }
@@ -112,13 +141,13 @@ const Horario = () => {
   const handleEditar = (materiaIndex) => {
     setEditIndex(materiaIndex);
     setEditData({
-      ...contenidoDiario.materias[materiaIndex],
+      ...contenidoDiario[dia].materias[materiaIndex],
     });
   };
 
   const handleEliminar = async (materiaIndex) => {
     try {
-      const updatedDay = { ...contenidoDiario };
+      const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias.splice(materiaIndex, 1);
 
       await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
@@ -129,7 +158,9 @@ const Horario = () => {
         body: JSON.stringify(updatedDay),
       });
 
-      setContenidoDiario(updatedDay);
+      const updatedContenidoDiario = [...contenidoDiario];
+      updatedContenidoDiario[dia] = updatedDay;
+      setContenidoDiario(updatedContenidoDiario);
       setEditIndex(null);
       setEditData({
         horario: "",
@@ -159,7 +190,7 @@ const Horario = () => {
     try {
       const dataToEdit = { ...editData, email: user.email, userId: user.sub };
 
-      const updatedDay = { ...contenidoDiario };
+      const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias[editIndex] = {
         ...updatedDay.materias[editIndex],
         ...dataToEdit,
@@ -180,7 +211,9 @@ const Horario = () => {
         curso: "",
       });
 
-      setContenidoDiario(updatedDay);
+      const updatedContenidoDiario = [...contenidoDiario];
+      updatedContenidoDiario[dia] = updatedDay;
+      setContenidoDiario(updatedContenidoDiario);
     } catch (error) {
       console.error("Error al editar la materia:", error);
     }
@@ -228,7 +261,7 @@ const Horario = () => {
                 </Button>
               </TableCell>
               <TableCell align="center" colSpan={2}>
-                {contenidoDiario.dia}
+                {contenidoDiario[dia].dia}
               </TableCell>
               <TableCell align="center">
                 <Button variant="text" onClick={incrementarDia}>
@@ -300,8 +333,8 @@ const Horario = () => {
                   </>
                 </TableCell>
               </TableRow>
-            ) : contenidoDiario.materias.length > 0 ? (
-              contenidoDiario.materias.map((materia, index) => (
+            ) : contenidoDiario[dia].materias.length > 0 ? (
+              contenidoDiario[dia].materias.map((materia, index) => (
                 <TableRow
                   hover
                   role="checkbox"
