@@ -156,15 +156,8 @@ const DenseTable = () => {
               .then((data) => {
                 // Actualizar los datos si es necesario
                 if (data.success) {
-                  // Realizar una nueva carga de datos
-                  fetch(
-                    `${apiUrl}/materias?email=${user.email}&userId=${user.sub}`
-                  )
-                    .then((response) => response.json())
-                    .then((data) => setRows(data))
-                    .catch((error) =>
-                      console.error("Error fetching data:", error)
-                    );
+                  // Recargar la página para ver los datos actualizados
+                  window.location.reload();
                 }
               })
               .catch((error) => console.error("Error adding data:", error));
