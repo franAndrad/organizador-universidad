@@ -9,7 +9,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const Parciales = () => {
   const [parciales, setParciales] = useState([]);
-  const { isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
   const apiUrl = process.env.REACT_APP_API_URL; 
 
   useEffect(() => {
@@ -20,7 +20,9 @@ const Parciales = () => {
 
   const obtenerParciales = async () => {
     try {
-      const response = await fetch(`${apiUrl}/parciales`);
+      const response = await fetch(
+        `${apiUrl}/parciales?email=${user.email}&userId=${user.sub}`
+      );
       if (response.ok) {
         const data = await response.json();
         setParciales(data);

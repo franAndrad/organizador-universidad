@@ -15,14 +15,20 @@ const Horario = () => {
   const [diaFijo, setDiaFijo] = useState("");
   const [diaActual, setDiaActual] = useState(new Date().getDay());
   const [dia, setDia] = useState(new Date().getDay());
-  const [contenidoDiario, setContenidoDiario] = useState({
-    _id: "",
-    dia: "",
-    materias: [],
-  });
-   const apiUrl = process.env.REACT_APP_API_URL; 
+  const getInitialData = () => [
+    { dia: "DOMINGO", materias: [] },
+    { dia: "LUNES", materias: [] },
+    { dia: "MARTES", materias: [] },
+    { dia: "MIERCOLES", materias: [] },
+    { dia: "JUEVES", materias: [] },
+    { dia: "VIERNES", materias: [] },
+    { dia: "SABADO", materias: [] },
+  ];
 
-  const { isAuthenticated } = useAuth0();
+  const [contenidoDiario, setContenidoDiario] = useState(getInitialData());
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  const { user, isAuthenticated } = useAuth0();
 
   const tablestyle = {
     mb: 2,
@@ -41,46 +47,37 @@ const Horario = () => {
     setDia((prevDia) => (prevDia - 1 + 7) % 7);
   };
 
-const consultarDatos = async () => {
-  try {
-    const response = await fetch(`${apiUrl}/horarios`);
-    const data = await response.json();
-    
-    if (Array.isArray(data) && data.length === 0) {
-      console.log("No se recibieron datos del servidor.");
-      return; // No realiza los sets si no hay datos
-    }
-    
-    if (data[dia]) {
-      setContenidoDiario(data[dia]);
-    }
-    
-    if (data[diaActual] && data[diaActual].dia) {
-      setDiaFijo(data[diaActual].dia);
-    } else {
-      console.error("No se encontró información para el día actual.");
-    }
-  } catch (error) {
-    console.error("Error al consultar los datos:", error);
-  }
-};
-
-
   useEffect(() => {
     if (isAuthenticated) {
       consultarDatos();
     } else {
-      setContenidoDiario({
-        _id: "",
-        dia: "Cargando...",
-        materias: [],
-      });
+      setContenidoDiario(getInitialData());
     }
   }, [isAuthenticated, dia]);
 
   useEffect(() => {
     setDia(diaActual);
   }, [diaActual]);
+
+  const consultarDatos = async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/horarios?email=${user.email}&userId=${user.sub}`
+      );
+      if (!response.ok) {
+        throw new Error("Error al obtener los datos");
+      }
+      const data = await response.json();
+      const updatedData = getInitialData().map((defaultDay) => {
+        const foundDay = data.find((item) => item.dia === defaultDay.dia);
+        return foundDay ? foundDay : defaultDay;
+      });
+      setContenidoDiario(updatedData);
+    } catch (error) {
+      console.error("Error al consultar los datos:", error);
+    }
+    setDiaFijo(contenidoDiario[diaActual].dia);
+  };
 
   return (
     <Container sx={{ overflow: "hidden" }}>
@@ -98,9 +95,7 @@ const consultarDatos = async () => {
                   {"<"}
                 </Button>
               </TableCell>
-              <TableCell align="center">
-                {contenidoDiario.dia}
-              </TableCell>
+              <TableCell align="center">{contenidoDiario.dia}</TableCell>
               <TableCell align="center">
                 <Button variant="text" onClick={incrementarDia}>
                   {">"}

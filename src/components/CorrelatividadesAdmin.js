@@ -58,7 +58,6 @@ const DenseTable = () => {
     }
   }, [isAuthenticated]);
 
-  console.log(rows)
   // Función para verificar si una materia se puede realizar
   const puedeRealizar = (materia, rows) => {
     // Verificar si la materia ya está aprobada o tiene una nota mayor o igual a 6
