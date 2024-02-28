@@ -41,16 +41,30 @@ const Horario = () => {
     setDia((prevDia) => (prevDia - 1 + 7) % 7);
   };
 
-  const consultarDatos = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/horarios`);
-      const data = await response.json();
-      setContenidoDiario(data[dia]);
-      setDiaFijo(data[diaActual].dia);
-    } catch (error) {
-      console.error("Error al consultar los datos:", error);
+const consultarDatos = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/horarios`);
+    const data = await response.json();
+    
+    if (Array.isArray(data) && data.length === 0) {
+      console.log("No se recibieron datos del servidor.");
+      return; // No realiza los sets si no hay datos
     }
-  };
+    
+    if (data[dia]) {
+      setContenidoDiario(data[dia]);
+    }
+    
+    if (data[diaActual] && data[diaActual].dia) {
+      setDiaFijo(data[diaActual].dia);
+    } else {
+      console.error("No se encontró información para el día actual.");
+    }
+  } catch (error) {
+    console.error("Error al consultar los datos:", error);
+  }
+};
+
 
   useEffect(() => {
     if (isAuthenticated) {
