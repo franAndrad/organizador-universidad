@@ -6,7 +6,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useAuth0 } from "@auth0/auth0-react";
-import parcialesData from "./data/parciales.json";
 
 const Parciales = () => {
   const [parciales, setParciales] = useState([]);
@@ -14,9 +13,23 @@ const Parciales = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      setParciales(parcialesData);
+      obtenerParciales();
     }
   }, [isAuthenticated]);
+
+  const obtenerParciales = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/parciales");
+      if (response.ok) {
+        const data = await response.json();
+        setParciales(data);
+      } else {
+        console.error("Error al obtener los parciales:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error al obtener los parciales:", error.message);
+    }
+  };
 
   const tablestyle = {
     width: "100%",
@@ -76,5 +89,3 @@ const Parciales = () => {
 };
 
 export default Parciales;
-
-
