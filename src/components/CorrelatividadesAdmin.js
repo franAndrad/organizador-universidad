@@ -62,7 +62,7 @@ const DenseTable = () => {
     if (isAuthenticated) {
       fetchData();
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, rows]);
 
   // Función para verificar si una materia se puede realizar
   const puedeRealizar = (materia, rows) => {
