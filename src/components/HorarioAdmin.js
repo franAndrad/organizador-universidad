@@ -113,7 +113,7 @@ const Horario = () => {
       const data = await response.json();
    
       // Verificar si hay datos
-if (typeof data === "undefined" || data.length === 0) {
+if (typeof data.length === "undefined" || data.length === 0) {
   // Si no hay datos, cargar un nuevo dato utilizando una petición POST
   const dataToAdd = { ...editData };
   const updatedDay = {
