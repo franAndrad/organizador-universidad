@@ -99,7 +99,7 @@ const Horario = () => {
       const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias.push(dataToAdd);
 
-      const response = await fetch(`${apiUrl}/horario`, {
+      const response = await fetch(`${apiUrl}/horarios`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
