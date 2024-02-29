@@ -122,12 +122,15 @@ const handleAdd = async () => {
     if (data.length === 0) {
       // Si no hay datos, cargar un nuevo dato utilizando una petición POST
       const dataToAdd = { ...editData, email: user.email, userId: user.sub };
+      const updatedDay = { ...contenidoDiario[dia] };
+      updatedDay.materias.push(dataToAdd);
+
       const postResponse = await fetch(`${apiUrl}/horarios`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataToAdd),
+        body: JSON.stringify(updatedDay),
       });
       if (!postResponse.ok) {
         throw new Error("Error al agregar el nuevo dato por defecto");
@@ -149,10 +152,11 @@ const handleAdd = async () => {
     } else {
       // Si ya hay datos, realizar una petición PUT para actualizar los datos
       const dataToAdd = { ...editData, email: user.email, userId: user.sub };
-      console.log(dataToAdd);
-
+      
       const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias.push(dataToAdd);
+      
+      console.log(updatedDay);
 
       const putResponse = await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
         method: "PUT",
