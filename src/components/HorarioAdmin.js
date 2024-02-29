@@ -20,45 +20,26 @@ const Horario = () => {
   const [diaFijo, setDiaFijo] = useState("");
   const [diaActual, setDiaActual] = useState(new Date().getDay());
   const [dia, setDia] = useState(new Date().getDay());
+    const getInitialData = () => [
+      { dia: "DOMINGO", materias: [] },
+      { dia: "LUNES", materias: [] },
+      { dia: "MARTES", materias: [] },
+      { dia: "MIERCOLES", materias: [] },
+      { dia: "JUEVES", materias: [] },
+      { dia: "VIERNES", materias: [] },
+      { dia: "SABADO", materias: [] },
+    ];
+    const getInitialDataAuthenticated = () => [
+      { dia: "DOMINGO", materias: [] },
+      { dia: "LUNES", materias: [] },
+      { dia: "MARTES", materias: [] },
+      { dia: "MIERCOLES", materias: [] },
+      { dia: "JUEVES", materias: [] },
+      { dia: "VIERNES", materias: [] },
+      { dia: "SABADO", materias: [] },
+    ];
 
-  const { user, isAuthenticated } = useAuth0();
-
-  const getInitialData = () => {
-    const defaultData = {
-      email: user.email,
-      userId: user.sub,
-      dia: "VIERNES",
-      materias: [
-        {
-          nombre: "Análisis de Sistemas de Información",
-          abreviacion: "ASI",
-          curso: "2K11 - 410",
-          horario: "08:00 - 10:25",
-        },
-        {
-          nombre: "Sistemas Operativos",
-          abreviacion: "SOP",
-          curso: "2K11 - 232",
-          horario: "12:05 - 14:00",
-        },
-      ],
-    };
-    return defaultData;
-  };
-
-  const getInitialDataAuthenticated = () => [
-    { dia: "DOMINGO", materias: [] },
-    { dia: "LUNES", materias: [] },
-    { dia: "MARTES", materias: [] },
-    { dia: "MIERCOLES", materias: [] },
-    { dia: "JUEVES", materias: [] },
-    { dia: "VIERNES", materias: [] },
-    { dia: "SABADO", materias: [] },
-  ];
-
-  const [contenidoDiario, setContenidoDiario] = useState(
-    isAuthenticated ? getInitialData() : getInitialDataAuthenticated()
-  );
+  const [contenidoDiario, setContenidoDiario] = useState(getInitialData());
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const [editIndex, setEditIndex] = useState(null);
@@ -70,11 +51,13 @@ const Horario = () => {
 
   const [adding, setAdding] = useState(false);
 
+  const { user, isAuthenticated } = useAuth0();
+
   useEffect(() => {
     if (isAuthenticated) {
       consultarDatos();
     } else {
-      setContenidoDiario(getInitialDataAuthenticated());
+      setContenidoDiario(getInitialData());
     }
   }, [isAuthenticated, dia]);
 
