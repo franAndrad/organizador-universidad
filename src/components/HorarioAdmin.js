@@ -132,6 +132,7 @@ const handleAdd = async () => {
         },
         body: JSON.stringify(updatedDay),
       });
+      console.log*(postResponse)
       if (!postResponse.ok) {
         throw new Error("Error al agregar el nuevo dato por defecto");
       }
