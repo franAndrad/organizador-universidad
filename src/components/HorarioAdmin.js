@@ -117,7 +117,6 @@ const handleAdd = async () => {
       throw new Error("Error al obtener los datos");
     }
     const data = await response.json();
-    console.log(data.length);
     // Verificar si hay datos
     if (data.length === 0) {
       // Si no hay datos, cargar un nuevo dato utilizando una petición POST
@@ -129,7 +128,7 @@ const handleAdd = async () => {
       };
       updatedDay.materias.push(dataToAdd);
       console.log(updatedDay);
-
+      
       const postResponse = await fetch(`${apiUrl}/horarios`, {
         method: "POST",
         headers: {
@@ -137,6 +136,7 @@ const handleAdd = async () => {
         },
         body: JSON.stringify(updatedDay),
       });
+      console.log(data.length);
       console.log(postResponse)
       if (!postResponse.ok) {
         throw new Error("Error al agregar el nuevo dato por defecto");
@@ -174,6 +174,7 @@ const handleAdd = async () => {
       if (!putResponse.ok) {
         throw new Error("Error al agregar el nuevo dato");
       }
+
 
       // Actualizar el estado con los nuevos datos
       const updatedContenidoDiario = [...contenidoDiario];
