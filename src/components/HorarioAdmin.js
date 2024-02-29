@@ -29,6 +29,7 @@ const Horario = () => {
       { dia: "VIERNES", materias: [] },
       { dia: "SABADO", materias: [] },
     ];
+    const { user, isAuthenticated } = useAuth0();
     const getInitialDataAuthenticated = () => [
       { email: user.email, userId: user.sub, dia: "DOMINGO", materias: [] },
       { email: user.email, userId: user.sub, dia: "LUNES", materias: [] },
@@ -51,7 +52,6 @@ const Horario = () => {
 
   const [adding, setAdding] = useState(false);
 
-  const { user, isAuthenticated } = useAuth0();
 
   useEffect(() => {
     if (isAuthenticated) {
