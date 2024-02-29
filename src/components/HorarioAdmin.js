@@ -113,71 +113,71 @@ const Horario = () => {
       const data = await response.json();
    
       // Verificar si hay datos
-      if (!data.length || data.length === 0) {
-        // Si no hay datos, cargar un nuevo dato utilizando una petición POST
-        const dataToAdd = { ...editData };
-        const updatedDay = {
-          ...contenidoDiario[dia],
-          email: user.email,
-          userId: user.sub,
-        };
-        updatedDay.materias.push(dataToAdd);
+if (typeof data === "undefined" || data.length === 0) {
+  // Si no hay datos, cargar un nuevo dato utilizando una petición POST
+  const dataToAdd = { ...editData };
+  const updatedDay = {
+    ...contenidoDiario[dia],
+    email: user.email,
+    userId: user.sub,
+  };
+  updatedDay.materias.push(dataToAdd);
 
-        const postResponse = await fetch(`${apiUrl}/horarios`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedDay),
-        });
-        if (!postResponse.ok) {
-          throw new Error("Error al agregar el nuevo dato por defecto");
-        }
+  const postResponse = await fetch(`${apiUrl}/horarios`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedDay),
+  });
+  if (!postResponse.ok) {
+    throw new Error("Error al agregar el nuevo dato por defecto");
+  }
 
-        // Actualizar el estado con los nuevos datos
-        const newData = await postResponse.json();
-        const updatedContenidoDiario = [...contenidoDiario];
-        updatedContenidoDiario[dia] = newData;
-        setContenidoDiario(updatedContenidoDiario);
+  // Actualizar el estado con los nuevos datos
+  const newData = await postResponse.json();
+  const updatedContenidoDiario = [...contenidoDiario];
+  updatedContenidoDiario[dia] = newData;
+  setContenidoDiario(updatedContenidoDiario);
 
-        // Limpiar los campos de edición y desactivar la bandera de añadir
-        setEditData({
-          horario: "",
-          abreviacion: "",
-          curso: "",
-        });
-        setAdding(false);
-      } else {
-        // Si ya hay datos, realizar una petición PUT para actualizar los datos
-        const dataToAdd = { ...editData, email: user.email, userId: user.sub };
+  // Limpiar los campos de edición y desactivar la bandera de añadir
+  setEditData({
+    horario: "",
+    abreviacion: "",
+    curso: "",
+  });
+  setAdding(false);
+} else {
+  // Si ya hay datos, realizar una petición PUT para actualizar los datos
+  const dataToAdd = { ...editData, email: user.email, userId: user.sub };
 
-        const updatedDay = { ...contenidoDiario[dia] };
-        updatedDay.materias.push(dataToAdd);
+  const updatedDay = { ...contenidoDiario[dia] };
+  updatedDay.materias.push(dataToAdd);
 
-        const putResponse = await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedDay),
-        });
-        if (!putResponse.ok) {
-          throw new Error("Error al agregar el nuevo dato");
-        }
+  const putResponse = await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedDay),
+  });
+  if (!putResponse.ok) {
+    throw new Error("Error al agregar el nuevo dato");
+  }
 
-        // Actualizar el estado con los nuevos datos
-        const updatedContenidoDiario = [...contenidoDiario];
-        updatedContenidoDiario[dia] = updatedDay;
-        setContenidoDiario(updatedContenidoDiario);
+  // Actualizar el estado con los nuevos datos
+  const updatedContenidoDiario = [...contenidoDiario];
+  updatedContenidoDiario[dia] = updatedDay;
+  setContenidoDiario(updatedContenidoDiario);
 
-        // Limpiar los campos de edición y desactivar la bandera de añadir
-        setEditData({
-          horario: "",
-          abreviacion: "",
-          curso: "",
-        });
-        setAdding(false);
-      }
+  // Limpiar los campos de edición y desactivar la bandera de añadir
+  setEditData({
+    horario: "",
+    abreviacion: "",
+    curso: "",
+  });
+  setAdding(false);
+}
     } catch (error) {
       console.error("Error al agregar la materia:", error);
     }
