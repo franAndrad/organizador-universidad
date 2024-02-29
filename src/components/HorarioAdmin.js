@@ -111,6 +111,7 @@ const Horario = () => {
         throw new Error("Error al obtener los datos");
       }
       const data = await response.json();
+      console.log(data);
       // Verificar si hay datos
       if (data && data.length === 0) {
         // Si no hay datos, cargar un nuevo dato utilizando una petición POST
