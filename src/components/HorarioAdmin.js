@@ -114,7 +114,7 @@ const Horario = () => {
       const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias.push(dataToAdd);
 
-      await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
+      await fetch(`${apiUrl}/horarios`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
