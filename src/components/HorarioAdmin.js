@@ -111,13 +111,11 @@ const Horario = () => {
     try {
 
       const dataToAdd = { ...editData, email: user.email, userId: user.sub };
-
-      console.log(dataToAdd);
       const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias.push(dataToAdd);
 
-      await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
-        method: "PUT",
+      await fetch(`${apiUrl}/horarios`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
