@@ -178,7 +178,7 @@ const Horario = () => {
         ...dataToEdit,
       };
 
-      await fetch(`${apiUrl}/horarios/${updatedDay._id}`, {
+      await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
