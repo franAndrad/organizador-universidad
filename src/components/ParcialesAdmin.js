@@ -26,10 +26,10 @@ const Parciales = () => {
 
 
   useEffect(() => {
-    if (isAuthenticated){
+    if (isAuthenticated) {
       obtenerParciales();
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const obtenerParciales = async () => {
     try {
@@ -115,30 +115,37 @@ const Parciales = () => {
     setEditData(newData);
   };
 
-  const handleAgregarParcial = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("${apiUrl}/parciales", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(nuevoParcial),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setParciales([...parciales, data]);
-        setEditData([...editData, { fecha: "", materia: "" }]);
-        setShowAddForm(false); // Ocultar el formulario después de agregar el parcial
-        setNuevoParcial({ fecha: "", materia: "" }); // Restablecer el estado del nuevo parcial
-        obtenerParciales(); // Actualizar la lista de parciales
-      } else {
-        console.error("Error al agregar el parcial:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error al agregar el parcial:", error.message);
+const handleAgregarParcial = async (e) => {
+  e.preventDefault();
+  try {
+    // Obtener el email y userId del usuario autenticado
+    const { email, sub: userId } = user;
+
+    // Agregar email y userId a nuevoParcial
+    const parcialConUsuario = { ...nuevoParcial, email, userId };
+
+    const response = await fetch(`${apiUrl}/parciales`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(parcialConUsuario),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setParciales([...parciales, data]);
+      setEditData([...editData, { fecha: "", materia: "" }]);
+      setShowAddForm(false); // Ocultar el formulario después de agregar el parcial
+      setNuevoParcial({ fecha: "", materia: "" }); // Restablecer el estado del nuevo parcial
+      obtenerParciales(); // Actualizar la lista de parciales
+    } else {
+      console.error("Error al agregar el parcial:", response.statusText);
     }
-  };
+  } catch (error) {
+    console.error("Error al agregar el parcial:", error.message);
+  }
+};
+
 
   const tablestyle = {
     width: "100%",
