@@ -17,32 +17,20 @@ import Parciales from "./ParcialesAdmin";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Horario = () => {
-  const { user, isAuthenticated } = useAuth0();
-
-  const initializeContenidoDiario = (user) => {
-    const diasSemana = [
-      "DOMINGO",
-      "LUNES",
-      "MARTES",
-      "MIERCOLES",
-      "JUEVES",
-      "VIERNES",
-      "SABADO",
-    ];
-    const contenidoInicial = diasSemana.map((dia) => ({
-      dia,
-      materias: [],
-      email: user ? user.email : "",
-      userId: user ? user.sub : "",
-    }));
-    return contenidoInicial;
-  };
-
-  const [contenidoDiario, setContenidoDiario] = useState(() =>
-    initializeContenidoDiario(user)
-  );
-
+  const [diaFijo, setDiaFijo] = useState("");
+  const [diaActual, setDiaActual] = useState(new Date().getDay());
   const [dia, setDia] = useState(new Date().getDay());
+  const getInitialData = () => [
+    { dia: "DOMINGO", materias: [] },
+    { dia: "LUNES", materias: [] },
+    { dia: "MARTES", materias: [] },
+    { dia: "MIERCOLES", materias: [] },
+    { dia: "JUEVES", materias: [] },
+    { dia: "VIERNES", materias: [] },
+    { dia: "SABADO", materias: [] },
+  ];
+
+  const [contenidoDiario, setContenidoDiario] = useState(getInitialData());
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const [editIndex, setEditIndex] = useState(null);
@@ -54,13 +42,19 @@ const Horario = () => {
 
   const [adding, setAdding] = useState(false);
 
+  const { user, isAuthenticated } = useAuth0();
+
   useEffect(() => {
     if (isAuthenticated) {
       consultarDatos();
     } else {
-      setContenidoDiario(initializeContenidoDiario());
+      setContenidoDiario(getInitialData());
     }
   }, [isAuthenticated, dia]);
+
+  useEffect(() => {
+    setDia(diaActual);
+  }, [diaActual]);
 
   const consultarDatos = async () => {
     try {
@@ -71,7 +65,7 @@ const Horario = () => {
         throw new Error("Error al obtener los datos");
       }
       const data = await response.json();
-      const updatedData = initializeContenidoDiario().map((defaultDay) => {
+      const updatedData = getInitialData().map((defaultDay) => {
         const foundDay = data.find((item) => item.dia === defaultDay.dia);
         return foundDay ? foundDay : defaultDay;
       });
@@ -79,6 +73,7 @@ const Horario = () => {
     } catch (error) {
       console.error("Error al consultar los datos:", error);
     }
+    setDiaFijo(contenidoDiario[diaActual].dia);
   };
 
   const handleAgregar = () => {
@@ -94,33 +89,133 @@ const Horario = () => {
     });
   };
 
+
   const handleAdd = async () => {
     try {
-      const dataToAdd = { ...editData, email: user.email, userId: user.sub };
-      const updatedDay = { ...contenidoDiario[dia] };
-      updatedDay.materias.push(dataToAdd);
-
-      const response = await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedDay),
-      });
+      // Realizar una petición GET para obtener los datos existentes
+      const response = await fetch(
+        `${apiUrl}/horarios?email=${user.email}&userId=${user.sub}`
+      );
       if (!response.ok) {
-        throw new Error("Error al agregar el nuevo dato");
+        throw new Error("Error al obtener los datos");
       }
+      const existingData = await response.json();
 
-      const updatedContenidoDiario = [...contenidoDiario];
-      updatedContenidoDiario[dia] = updatedDay;
-      setContenidoDiario(updatedContenidoDiario);
+      // Verificar si la longitud de los datos es menor que 7
+      if (existingData.length < 7) {
+        // Realizar una serie de peticiones POST para agregar los datos faltantes
+        const missingData = [
+          { email: user.email, userId: user.sub, dia: "DOMINGO", materias: [] },
+          { email: user.email, userId: user.sub, dia: "LUNES", materias: [] },
+          { email: user.email, userId: user.sub, dia: "MARTES", materias: [] },
+          { email: user.email, userId: user.sub, dia: "MIERCOLES", materias: []},
+          { email: user.email, userId: user.sub, dia: "JUEVES", materias: [] },
+          { email: user.email, userId: user.sub, dia: "VIERNES", materias: [] },
+          { email: user.email, userId: user.sub, dia: "SABADO", materias: [] },
+        ];
 
-      setEditData({
-        horario: "",
-        abreviacion: "",
-        curso: "",
-      });
-      setAdding(false);
+        const postRequests = missingData.map(async (data) => {
+          const postResponse = await fetch(`${apiUrl}/horarios`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+          if (!postResponse.ok) {
+            throw new Error(
+              `Error al agregar los datos para el día ${data.dia}`
+            );
+          }
+          return postResponse.json();
+        });
+
+        // Esperar a que todas las peticiones POST se completen
+        await Promise.all(postRequests);
+
+        // Después de completar las solicitudes POST, hacer una petición GET para obtener el ID del horario actualizado
+        const updatedResponse = await fetch(
+          `${apiUrl}/horarios?email=${user.email}&userId=${user.sub}`
+        );
+        if (!updatedResponse.ok) {
+          throw new Error("Error al obtener los datos actualizados");
+        }
+        const updatedData = await updatedResponse.json();
+
+        const dias = [
+          "DOMINGO",
+          "LUNES",
+          "MARTES",
+          "MIERCOLES",
+          "JUEVES",
+          "VIERNES",
+          "SABADO",
+        ];
+        const diaElegido = dias[dia];
+        const diaSeleccionado = updatedData.find(
+          (item) => item.dia === diaElegido
+        );
+
+        // Agregar la nueva materia
+        diaSeleccionado.materias.push(editData);
+
+        // Realizar la petición PUT
+        const putResponse = await fetch(
+          `${apiUrl}/horario/${diaSeleccionado._id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(diaSeleccionado),
+          }
+        );
+
+        if (!putResponse.ok) {
+          throw new Error("Error al actualizar el día");
+        }
+
+        // Limpiar los datos de edición y actualizar el estado
+        setEditData({
+          horario: "",
+          abreviacion: "",
+          curso: "",
+        });
+        setAdding(false);
+        const updatedContenidoDiario = [...contenidoDiario];
+        updatedContenidoDiario[dia] = diaSeleccionado;
+        setContenidoDiario(updatedContenidoDiario);
+      } else {
+        // Si la longitud es igual a 7, solo hacer la petición PUT para actualizar el día actual
+        const updatedDay = { ...contenidoDiario[dia] };
+
+        // Agregar la nueva materia
+        updatedDay.materias.push(editData);
+
+        // Realizar la petición PUT
+        const putResponse = await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedDay),
+        });
+
+        if (!putResponse.ok) {
+          throw new Error("Error al actualizar el día");
+        }
+
+        // Limpiar los datos de edición y actualizar el estado
+        setEditData({
+          horario: "",
+          abreviacion: "",
+          curso: "",
+        });
+        setAdding(false);
+        const updatedContenidoDiario = [...contenidoDiario];
+        updatedContenidoDiario[dia] = updatedDay;
+        setContenidoDiario(updatedContenidoDiario);
+      }
     } catch (error) {
       console.error("Error al agregar la materia:", error);
     }
@@ -177,6 +272,7 @@ const Horario = () => {
   const handleSubmitEdit = async () => {
     try {
       const dataToEdit = { ...editData, email: user.email, userId: user.sub };
+
       const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias[editIndex] = {
         ...updatedDay.materias[editIndex],
@@ -238,7 +334,7 @@ const Horario = () => {
           <TableHead>
             <TableRow>
               <TableCell align="center" colSpan={4}>
-                <Reloj data={contenidoDiario[dia].dia} />
+                <Reloj data={diaFijo} />
               </TableCell>
             </TableRow>
             <TableRow>
