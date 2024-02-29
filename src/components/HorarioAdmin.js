@@ -107,9 +107,9 @@ const handleAdd = async () => {
     const dataToAdd = { ...editData};
     const updatedDay = {
       ...contenidoDiario[dia],
-      email: user.email, userId: user.sub ,
       materias: [...contenidoDiario[dia].materias, dataToAdd],
     };
+    console.log(updatedDay);
 
     const postResponse = await fetch(`${apiUrl}/horarios`, {
       method: "POST",
