@@ -117,13 +117,14 @@ const handleAdd = async () => {
       throw new Error("Error al obtener los datos");
     }
     const data = await response.json();
-
+    
     // Verificar si hay datos
     if (data.length === 0) {
       // Si no hay datos, cargar un nuevo dato utilizando una petición POST
       const dataToAdd = { ...editData, email: user.email, userId: user.sub };
       const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias.push(dataToAdd);
+      console.log(updatedDay);
 
       const postResponse = await fetch(`${apiUrl}/horarios`, {
         method: "POST",
