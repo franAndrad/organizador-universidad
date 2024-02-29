@@ -17,30 +17,40 @@ import Parciales from "./ParcialesAdmin";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Horario = () => {
+  const { user, isAuthenticated } = useAuth0();
+
+  const initializeContenidoDiario = (user) => {
+    const diasSemana = [
+      "DOMINGO",
+      "LUNES",
+      "MARTES",
+      "MIERCOLES",
+      "JUEVES",
+      "VIERNES",
+      "SABADO",
+    ];
+    const contenidoInicial = diasSemana.map((dia) => ({
+      dia,
+      materias: [],
+      email: user ? user.email : "",
+      userId: user ? user.sub : "",
+    }));
+    return contenidoInicial;
+  };
+
+  const [contenidoDiario, setContenidoDiario] = useState(() =>
+    initializeContenidoDiario(user)
+  );
+
+
+
+
   const [diaFijo, setDiaFijo] = useState("");
   const [diaActual, setDiaActual] = useState(new Date().getDay());
   const [dia, setDia] = useState(new Date().getDay());
-    const getInitialData = () => [
-      { dia: "DOMINGO", materias: [] },
-      { dia: "LUNES", materias: [] },
-      { dia: "MARTES", materias: [] },
-      { dia: "MIERCOLES", materias: [] },
-      { dia: "JUEVES", materias: [] },
-      { dia: "VIERNES", materias: [] },
-      { dia: "SABADO", materias: [] },
-    ];
-    const getInitialDataAuthenticated = () => [
-      { dia: "DOMINGO", materias: [] },
-      { dia: "LUNES", materias: [] },
-      { dia: "MARTES", materias: [] },
-      { dia: "MIERCOLES", materias: [] },
-      { dia: "JUEVES", materias: [] },
-      { dia: "VIERNES", materias: [] },
-      { dia: "SABADO", materias: [] },
-    ];
-
-  const [contenidoDiario, setContenidoDiario] = useState(getInitialData());
   const apiUrl = process.env.REACT_APP_API_URL;
+
+  
 
   const [editIndex, setEditIndex] = useState(null);
   const [editData, setEditData] = useState({
@@ -51,13 +61,12 @@ const Horario = () => {
 
   const [adding, setAdding] = useState(false);
 
-  const { user, isAuthenticated } = useAuth0();
 
   useEffect(() => {
     if (isAuthenticated) {
       consultarDatos();
     } else {
-      setContenidoDiario(getInitialData());
+      setContenidoDiario(initializeContenidoDiario());
     }
   }, [isAuthenticated, dia]);
 
@@ -74,7 +83,7 @@ const Horario = () => {
         throw new Error("Error al obtener los datos");
       }
       const data = await response.json();
-      const updatedData = getInitialData().map((defaultDay) => {
+      const updatedData = initializeContenidoDiario().map((defaultDay) => {
         const foundDay = data.find((item) => item.dia === defaultDay.dia);
         return foundDay ? foundDay : defaultDay;
       });
