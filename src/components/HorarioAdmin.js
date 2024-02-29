@@ -20,7 +20,33 @@ const Horario = () => {
   const [diaFijo, setDiaFijo] = useState("");
   const [diaActual, setDiaActual] = useState(new Date().getDay());
   const [dia, setDia] = useState(new Date().getDay());
-  const getInitialData = () => [
+
+  const { user, isAuthenticated } = useAuth0();
+
+  const getInitialData = () => {
+    const defaultData = {
+      email: user.email,
+      userId: user.sub,
+      dia: "VIERNES",
+      materias: [
+        {
+          nombre: "Análisis de Sistemas de Información",
+          abreviacion: "ASI",
+          curso: "2K11 - 410",
+          horario: "08:00 - 10:25",
+        },
+        {
+          nombre: "Sistemas Operativos",
+          abreviacion: "SOP",
+          curso: "2K11 - 232",
+          horario: "12:05 - 14:00",
+        },
+      ],
+    };
+    return defaultData;
+  };
+
+  const getInitialDataAuthenticated = () => [
     { dia: "DOMINGO", materias: [] },
     { dia: "LUNES", materias: [] },
     { dia: "MARTES", materias: [] },
@@ -29,9 +55,10 @@ const Horario = () => {
     { dia: "VIERNES", materias: [] },
     { dia: "SABADO", materias: [] },
   ];
-  const { user, isAuthenticated } = useAuth0();
 
-  const [contenidoDiario, setContenidoDiario] = useState(getInitialData());
+  const [contenidoDiario, setContenidoDiario] = useState(
+    isAuthenticated ? getInitialData() : getInitialDataAuthenticated()
+  );
   const apiUrl = process.env.REACT_APP_API_URL;
 
   const [editIndex, setEditIndex] = useState(null);
@@ -47,7 +74,7 @@ const Horario = () => {
     if (isAuthenticated) {
       consultarDatos();
     } else {
-      setContenidoDiario(getInitialData());
+      setContenidoDiario(getInitialDataAuthenticated());
     }
   }, [isAuthenticated, dia]);
 
@@ -90,28 +117,18 @@ const Horario = () => {
 
   const handleAdd = async () => {
     try {
-      const dataToAdd = {
-        ...editData,
-        email: user.email,
-        userId: user.sub,
-      };
+      const dataToAdd = { ...editData, email: user.email, userId: user.sub };
 
       const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias.push(dataToAdd);
 
-      const response = await fetch(`${apiUrl}/horarios`, {
-        method: "POST",
+      await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedDay),
       });
-
-      if (!response.ok) {
-        throw new Error("Error al agregar la materia");
-      }
-
-      const responseData = await response.json();
 
       setEditData({
         horario: "",
@@ -122,7 +139,7 @@ const Horario = () => {
       setAdding(false);
 
       const updatedContenidoDiario = [...contenidoDiario];
-      updatedContenidoDiario[dia] = responseData; // assuming your API returns the updated day with _id
+      updatedContenidoDiario[dia] = updatedDay;
       setContenidoDiario(updatedContenidoDiario);
     } catch (error) {
       console.error("Error al agregar la materia:", error);
@@ -179,11 +196,7 @@ const Horario = () => {
 
   const handleSubmitEdit = async () => {
     try {
-      const dataToEdit = {
-        ...editData,
-        email: user.email,
-        userId: user.sub,
-      };
+      const dataToEdit = { ...editData, email: user.email, userId: user.sub };
 
       const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias[editIndex] = {
