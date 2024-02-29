@@ -30,15 +30,6 @@ const Horario = () => {
     { dia: "SABADO", materias: [] },
   ];
   const { user, isAuthenticated } = useAuth0();
-  const getInitialDataAuthenticated = () => [
-    { email: user.email, userId: user.sub, dia: "DOMINGO", materias: [] },
-    { email: user.email, userId: user.sub, dia: "LUNES", materias: [] },
-    { email: user.email, userId: user.sub, dia: "MARTES", materias: [] },
-    { email: user.email, userId: user.sub, dia: "MIERCOLES", materias: [] },
-    { email: user.email, userId: user.sub, dia: "JUEVES", materias: [] },
-    { email: user.email, userId: user.sub, dia: "VIERNES", materias: [] },
-    { email: user.email, userId: user.sub, dia: "SABADO", materias: [] },
-  ];
 
   const [contenidoDiario, setContenidoDiario] = useState(getInitialData());
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -73,7 +64,7 @@ const Horario = () => {
         throw new Error("Error al obtener los datos");
       }
       const data = await response.json();
-      const updatedData = getInitialDataAuthenticated().map((defaultDay) => {
+      const updatedData = getInitialData().map((defaultDay) => {
         const foundDay = data.find((item) => item.dia === defaultDay.dia);
         return foundDay ? foundDay : defaultDay;
       });
