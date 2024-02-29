@@ -10,14 +10,13 @@ import Menu from "@mui/material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import EditIcon from "@mui/icons-material/Edit";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function MenuAppBar() {
-  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [isEditing, setIsEditing] = React.useState(false); // Estado para indicar si está en modo de edición
-  const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const { isLoading } = useAuth0();
+  const location = useLocation();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -25,10 +24,6 @@ export default function MenuAppBar() {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleEditClick = () => {
-    setIsEditing(!isEditing); // Cambia el estado de edición al hacer clic en Edit
   };
 
   return (
@@ -53,18 +48,31 @@ export default function MenuAppBar() {
             <>
               {isAuthenticated ? (
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  <IconButton
-                    size="large"
-                    aria-label="edit"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    onClick={handleEditClick}
-                    color="inherit"
-                    component={Link}
-                    to={isEditing ? "/" : "/admin"}
-                  >
-                    {isEditing ? <HomeIcon /> : <EditIcon />}
-                  </IconButton>
+                  {location.pathname === "/admin" ? (
+                    <IconButton
+                      size="large"
+                      aria-label="edit"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      color="inherit"
+                      component={Link}
+                      to="/"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      size="large"
+                      aria-label="edit"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      color="inherit"
+                      component={Link}
+                      to="/admin"
+                    >
+                      <HomeIcon />
+                    </IconButton>
+                  )}
                   <div style={{ flexGrow: 1 }} />
                   <IconButton
                     size="large"
