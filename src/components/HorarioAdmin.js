@@ -42,10 +42,15 @@ const Horario = () => {
     initializeContenidoDiario(user)
   );
 
+
+
+
   const [diaFijo, setDiaFijo] = useState("");
   const [diaActual, setDiaActual] = useState(new Date().getDay());
   const [dia, setDia] = useState(new Date().getDay());
   const apiUrl = process.env.REACT_APP_API_URL;
+
+  
 
   const [editIndex, setEditIndex] = useState(null);
   const [editData, setEditData] = useState({
@@ -55,6 +60,7 @@ const Horario = () => {
   });
 
   const [adding, setAdding] = useState(false);
+
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -103,7 +109,18 @@ const Horario = () => {
 
 const handleAdd = async () => {
   try {
-      // Si no hay datos o data es undefined, cargar un nuevo dato utilizando una petición POST
+    // Realizar la petición GET para obtener los datos actuales
+    const response = await fetch(
+      `${apiUrl}/horarios?email=${user.email}&userId=${user.sub}`
+    );
+    if (!response.ok) {
+      throw new Error("Error al obtener los datos");
+    }
+    const data = await response.json();
+    
+    // Verificar si hay datos
+    if (data.length === 0) {
+      // Si no hay datos, cargar un nuevo dato utilizando una petición POST
       const dataToAdd = { ...editData };
       const updatedDay = {
         ...contenidoDiario[dia],
@@ -111,6 +128,7 @@ const handleAdd = async () => {
         userId: user.sub,
       };
       updatedDay.materias.push(dataToAdd);
+      console.log(updatedDay);
 
       const postResponse = await fetch(`${apiUrl}/horarios`, {
         method: "POST",
@@ -119,6 +137,7 @@ const handleAdd = async () => {
         },
         body: JSON.stringify(updatedDay),
       });
+      console.log(postResponse)
       if (!postResponse.ok) {
         throw new Error("Error al agregar el nuevo dato por defecto");
       }
@@ -136,6 +155,39 @@ const handleAdd = async () => {
         curso: "",
       });
       setAdding(false);
+    } else {
+      // Si ya hay datos, realizar una petición PUT para actualizar los datos
+      const dataToAdd = { ...editData, email: user.email, userId: user.sub };
+      
+      const updatedDay = { ...contenidoDiario[dia] };
+      updatedDay.materias.push(dataToAdd);
+      
+      console.log(updatedDay);
+
+      const putResponse = await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedDay),
+      });
+      if (!putResponse.ok) {
+        throw new Error("Error al agregar el nuevo dato");
+      }
+
+      // Actualizar el estado con los nuevos datos
+      const updatedContenidoDiario = [...contenidoDiario];
+      updatedContenidoDiario[dia] = updatedDay;
+      setContenidoDiario(updatedContenidoDiario);
+
+      // Limpiar los campos de edición y desactivar la bandera de añadir
+      setEditData({
+        horario: "",
+        abreviacion: "",
+        curso: "",
+      });
+      setAdding(false);
+    }
   } catch (error) {
     console.error("Error al agregar la materia:", error);
   }
@@ -336,7 +388,7 @@ const handleAdd = async () => {
                   </>
                 </TableCell>
               </TableRow>
-            ) : contenidoDiario[dia]?.materias?.length > 0 ? (
+            ) : contenidoDiario[dia].materias.length > 0 ? (
               contenidoDiario[dia].materias.map((materia, index) => (
                 <TableRow
                   hover
