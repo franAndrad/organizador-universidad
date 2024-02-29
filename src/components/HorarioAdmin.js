@@ -147,6 +147,7 @@ const handleAdd = async () => {
       const updatedContenidoDiario = [...contenidoDiario];
       updatedContenidoDiario[dia] = newData;
       setContenidoDiario(updatedContenidoDiario);
+      consultarDatos();
 
       // Limpiar los campos de edición y desactivar la bandera de añadir
       setEditData({
