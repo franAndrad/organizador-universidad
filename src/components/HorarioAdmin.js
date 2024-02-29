@@ -109,8 +109,10 @@ const Horario = () => {
 
   const handleAdd = async () => {
     try {
+
       const dataToAdd = { ...editData, email: user.email, userId: user.sub };
 
+      console.log(dataToAdd);
       const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias.push(dataToAdd);
 
