@@ -58,7 +58,7 @@ export default function MenuAppBar() {
                       component={Link}
                       to="/"
                     >
-                      <EditIcon />
+                      <HomeIcon />
                     </IconButton>
                   ) : (
                     <IconButton
@@ -70,7 +70,7 @@ export default function MenuAppBar() {
                       component={Link}
                       to="/admin"
                     >
-                      <HomeIcon />
+                      <EditIcon />
                     </IconButton>
                   )}
                   <div style={{ flexGrow: 1 }} />

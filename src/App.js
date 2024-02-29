@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Menu from "./components/Menu";
 import Home from "./components/Home";
+import Footer from "./components/Footer";
 import HomeAdmin from "./components/HomeAdmin";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
@@ -26,6 +27,7 @@ export default function App() {
           <Route exact path="/admin" element={<HomeAdmin />} />
         </Routes>
       </BrowserRouter>
+      <Footer />
     </ThemeProvider>
   );
 }
