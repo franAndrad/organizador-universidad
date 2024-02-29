@@ -121,8 +121,12 @@ const handleAdd = async () => {
     // Verificar si hay datos
     if (data.length === 0) {
       // Si no hay datos, cargar un nuevo dato utilizando una petición POST
-      const dataToAdd = { ...editData, email: user.email, userId: user.sub };
-      const updatedDay = { ...contenidoDiario[dia] };
+      const dataToAdd = { ...editData };
+      const updatedDay = {
+        ...contenidoDiario[dia],
+        email: user.email,
+        userId: user.sub,
+      };
       updatedDay.materias.push(dataToAdd);
       console.log(updatedDay);
 
