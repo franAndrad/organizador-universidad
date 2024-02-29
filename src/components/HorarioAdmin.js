@@ -389,7 +389,7 @@ const handleAdd = async () => {
                   </>
                 </TableCell>
               </TableRow>
-            ) : contenidoDiario[dia]?.materias?.length > 0 ? (
+            ) : contenidoDiario[dia].materias.length > 0 ? (
               contenidoDiario[dia].materias.map((materia, index) => (
                 <TableRow
                   hover
