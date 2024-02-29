@@ -117,7 +117,7 @@ const handleAdd = async () => {
       throw new Error("Error al obtener los datos");
     }
     const data = await response.json();
-    
+    console.log(data.length);
     // Verificar si hay datos
     if (data.length === 0) {
       // Si no hay datos, cargar un nuevo dato utilizando una petición POST
