@@ -20,25 +20,25 @@ const Horario = () => {
   const [diaFijo, setDiaFijo] = useState("");
   const [diaActual, setDiaActual] = useState(new Date().getDay());
   const [dia, setDia] = useState(new Date().getDay());
-    const getInitialData = () => [
-      { dia: "DOMINGO", materias: [] },
-      { dia: "LUNES", materias: [] },
-      { dia: "MARTES", materias: [] },
-      { dia: "MIERCOLES", materias: [] },
-      { dia: "JUEVES", materias: [] },
-      { dia: "VIERNES", materias: [] },
-      { dia: "SABADO", materias: [] },
-    ];
-    const { user, isAuthenticated } = useAuth0();
-    const getInitialDataAuthenticated = () => [
-      { email: user.email, userId: user.sub, dia: "DOMINGO", materias: [] },
-      { email: user.email, userId: user.sub, dia: "LUNES", materias: [] },
-      { email: user.email, userId: user.sub, dia: "MARTES", materias: [] },
-      { email: user.email, userId: user.sub, dia: "MIERCOLES", materias: [] },
-      { email: user.email, userId: user.sub, dia: "JUEVES", materias: [] },
-      { email: user.email, userId: user.sub, dia: "VIERNES", materias: [] },
-      { email: user.email, userId: user.sub, dia: "SABADO", materias: [] },
-    ];
+  const getInitialData = () => [
+    { dia: "DOMINGO", materias: [] },
+    { dia: "LUNES", materias: [] },
+    { dia: "MARTES", materias: [] },
+    { dia: "MIERCOLES", materias: [] },
+    { dia: "JUEVES", materias: [] },
+    { dia: "VIERNES", materias: [] },
+    { dia: "SABADO", materias: [] },
+  ];
+  const { user, isAuthenticated } = useAuth0();
+  const getInitialDataAuthenticated = () => [
+    { email: user.email, userId: user.sub, dia: "DOMINGO", materias: [] },
+    { email: user.email, userId: user.sub, dia: "LUNES", materias: [] },
+    { email: user.email, userId: user.sub, dia: "MARTES", materias: [] },
+    { email: user.email, userId: user.sub, dia: "MIERCOLES", materias: [] },
+    { email: user.email, userId: user.sub, dia: "JUEVES", materias: [] },
+    { email: user.email, userId: user.sub, dia: "VIERNES", materias: [] },
+    { email: user.email, userId: user.sub, dia: "SABADO", materias: [] },
+  ];
 
   const [contenidoDiario, setContenidoDiario] = useState(getInitialData());
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -51,7 +51,6 @@ const Horario = () => {
   });
 
   const [adding, setAdding] = useState(false);
-
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -100,18 +99,28 @@ const Horario = () => {
 
   const handleAdd = async () => {
     try {
-      const dataToAdd = { ...editData, email: user.email, userId: user.sub };
+      const dataToAdd = {
+        ...editData,
+        email: user.email,
+        userId: user.sub,
+      };
 
       const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias.push(dataToAdd);
 
-      await fetch(`${apiUrl}/horario/${updatedDay._id}`, {
-        method: "PUT",
+      const response = await fetch(`${apiUrl}/horario`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedDay),
       });
+
+      if (!response.ok) {
+        throw new Error("Error al agregar la materia");
+      }
+
+      const responseData = await response.json();
 
       setEditData({
         horario: "",
@@ -122,7 +131,7 @@ const Horario = () => {
       setAdding(false);
 
       const updatedContenidoDiario = [...contenidoDiario];
-      updatedContenidoDiario[dia] = updatedDay;
+      updatedContenidoDiario[dia] = responseData; // assuming your API returns the updated day with _id
       setContenidoDiario(updatedContenidoDiario);
     } catch (error) {
       console.error("Error al agregar la materia:", error);
@@ -179,7 +188,11 @@ const Horario = () => {
 
   const handleSubmitEdit = async () => {
     try {
-      const dataToEdit = { ...editData, email: user.email, userId: user.sub };
+      const dataToEdit = {
+        ...editData,
+        email: user.email,
+        userId: user.sub,
+      };
 
       const updatedDay = { ...contenidoDiario[dia] };
       updatedDay.materias[editIndex] = {
