@@ -103,32 +103,30 @@ const Horario = () => {
 
 const handleAdd = async () => {
   try {
-    // Realizar la petición POST para agregar un nuevo dato
-    const dataToAdd = { ...editData};
-    const updatedDay = {
-      ...contenidoDiario[dia],
-      materias: [...contenidoDiario[dia].materias, dataToAdd],
+    const dataToAdd = {
+      ...editData,
+      dia: contenidoDiario[dia].dia,
+      email: user.email,
+      userId: user.sub,
     };
-    console.log(updatedDay);
 
     const postResponse = await fetch(`${apiUrl}/horarios`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(updatedDay),
+      body: JSON.stringify(dataToAdd),
     });
+
     if (!postResponse.ok) {
       throw new Error("Error al agregar el nuevo dato");
     }
 
-    // Actualizar el estado con los nuevos datos
     const newData = await postResponse.json();
     const updatedContenidoDiario = [...contenidoDiario];
     updatedContenidoDiario[dia] = newData;
     setContenidoDiario(updatedContenidoDiario);
 
-    // Limpiar los campos de edición y desactivar la bandera de añadir
     setEditData({
       horario: "",
       abreviacion: "",
@@ -139,6 +137,7 @@ const handleAdd = async () => {
     console.error("Error al agregar la materia:", error);
   }
 };
+
   const handleEditar = (materiaIndex) => {
     setEditIndex(materiaIndex);
     setEditData({
