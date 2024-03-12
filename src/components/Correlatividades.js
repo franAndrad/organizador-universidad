@@ -29,7 +29,7 @@ const tablestyle = {
 };
 
 const DenseTable = () => {
-  const [rows, setRows] = useState([]);
+  const [correlatividades, setCorrelatividades] = useState([]);
   const { user, isAuthenticated } = useAuth0();
   const apiUrl = process.env.REACT_APP_API_URL; 
 
@@ -38,24 +38,27 @@ const DenseTable = () => {
     if (isAuthenticated) {
       fetch(`${apiUrl}/materias?email=${user.email}&userId=${user.sub}`)
         .then((response) => response.json())
-        .then((data) => setRows(data))
+        .then((data) => {
+          const sortedData = data.sort((a, b) => a.numero - b.numero);
+          setCorrelatividades(sortedData);
+        })
         .catch((error) => console.error("Error fetching data:", error));
     }
   }, [isAuthenticated]);
 
   // Función para verificar si una materia se puede realizar
-  const puedeRealizar = (materia, rows) => {
+  const puedeRealizar = (materia, correlatividades) => {
     // Verificar si la materia ya está aprobada o tiene una nota mayor o igual a 6
     if (materia.nota >= 6) return false;
 
     // Obtener los números de las materias aprobadas y regulares
-    const materiasAprobadas = rows
-      .filter((row) => row.nota >= 7)
-      .map((row) => row.numero);
+    const materiasAprobadas = correlatividades
+      .filter((materia) => materia.nota >= 7)
+      .map((materia) => materia.numero);
 
-    const materiasRegulares = rows
-      .filter((row) => row.nota === 6)
-      .map((row) => row.numero);
+    const materiasRegulares = correlatividades
+      .filter((materia) => materia.nota === 6)
+      .map((materia) => materia.numero);
 
     // Verificar si el estudiante ha aprobado todas las materias requeridas para regular y aprobada
     const todasRegularesAprobadas = materia.regular.every(
@@ -93,7 +96,7 @@ const DenseTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.length === 0 ? (
+            {correlatividades.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={5}
@@ -104,28 +107,28 @@ const DenseTable = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              rows.map((row) => (
+              correlatividades.map((materia) => (
                 <TableRow
                   hover
                   role="checkbox"
-                  key={row.nombre}
+                  key={materia.nombre}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     backgroundColor:
-                      row.nota >= 7
+                      materia.nota >= 7
                         ? "#80af"
-                        : row.nota === 6
+                        : materia.nota === 6
                         ? "#80a5"
-                        : puedeRealizar(row, rows)
+                        : puedeRealizar(materia, correlatividades)
                         ? "#806f"
                         : "inherit",
                   }}
                 >
-                  <TableCell align="left">{row.numero}</TableCell>
-                  <TableCell align="left">{row.nombre}</TableCell>
-                  <TableCell align="left">{row.abreviacion}</TableCell>
-                  <TableCell align="left">{row.modalidad}</TableCell>
-                  <TableCell align="left">{row.nota}</TableCell>
+                  <TableCell align="left">{materia.numero}</TableCell>
+                  <TableCell align="left">{materia.nombre}</TableCell>
+                  <TableCell align="left">{materia.abreviacion}</TableCell>
+                  <TableCell align="left">{materia.modalidad}</TableCell>
+                  <TableCell align="left">{materia.nota}</TableCell>
                 </TableRow>
               ))
             )}
@@ -146,7 +149,7 @@ const DenseTable = () => {
                 bgcolor: "#80a5",
               }}
             />
-            <p>Regulares: {rows.filter((row) => row.nota === 6).length}</p>
+            <p>Regulares: {correlatividades.filter((materia) => materia.nota === 6).length}</p>
           </Box>
           {/* Contar materias aprobadas */}
           <Box sx={{ display: "flex" }}>
@@ -159,7 +162,7 @@ const DenseTable = () => {
                 bgcolor: "#80af",
               }}
             />
-            <p>Aprobadas: {rows.filter((row) => row.nota >= 7).length}</p>
+            <p>Aprobadas: {correlatividades.filter((materia) => materia.nota >= 7).length}</p>
           </Box>
           <Box sx={{ display: "flex" }}>
             <Box
